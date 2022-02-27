@@ -1,0 +1,259 @@
+#
+# Welcome to the Ostereier configuration settings
+#
+# - The configuration is not simple, so please read the documentation first.
+# -
+# - Please see our Github Wiki
+# -      https://github.com/Kirastur/Ostereier/wiki
+# -
+# - For support you can contact us at discord.
+# -      A link to discord can be found on the Github Wiki
+# -
+
+# - The Configuration is distributed accross multiple files:
+# -   * config.yml => This file
+# -   * currencies.yml ==> The name of the used currencies in different languages
+# -   * eggs.yml ==>  Definition of all eggs (icon and rewars)
+# -   * messages.yml ==> Translated messages (e.g. shop title)
+# -   * offers.yml ==> Definition of the reward items the ingame NPC trader offers for collected eggs
+# -   * playerscores.yml ==> The persistent store for the poins earned by each player (if INTERNAL)
+# -   * spawnpoints.yml ==> Definition of the possible places for the eggs (created by the editor)
+# -   * templates.yml => Definition of all templates (frequency distribution of the different egg types)
+
+
+# startup
+# 
+# - Global settings only read at systemstart
+startup:
+
+   # SafeMode
+   #
+   # - In principle you can use all Meterials as Icon for the eggs.
+   # - But some Materials have special effects which we don't handle
+   # - in our code. Therefore we only allow approved Materials
+   # - as eggs. This is the "SafeMode". If you want to disable
+   # - this check, set the option to "false". 
+   # - Do this on your own risk.
+   safeMode: true
+ 
+   # MultiWorld
+   #
+   # - In normal gamemode, the location of each egg is bound to a 
+   # - specific world. So an egg placed in the normal "world" will not
+   # - appear in the "nether". But if you are using Ostereier as a
+   # - minigame, you may have more instances of the same map in
+   # - different worlds. In this case, a worldcheck does not make sense.
+   # - If you enable Multiword, the world-part of the location is ignored,
+   # - so the egg can spawn in every world where the 
+   # - Ostereier game-mode is active.
+   multiWorld: false
+   
+   # Passive Mode
+   #
+   # - In passive mode the plugin engine is not initialized,
+   # - only the Java objects are avail.
+   # - You had to instanciate your own orchestratator
+   # - and regsiter it as API.
+   # - Use this option only if you customize the Java objects itself.
+   passiveMode: false
+
+
+# Editor (place eggs)
+editor:
+
+   # SwapMouseButtonsForEggs
+   #
+   # - Normally you mine or remove a block with left-click,
+   # - and place a block with right-click.
+   # - But for placing and removing eggs it's a better workflow
+   # - to place eggs with left-click and remove them with right-click.
+   # - So we suggest to swap button functionallity while in editor mode.
+   swapMouseButtonsForEggs: true
+        
+   # The message-text for the statusbar is defined in messages.yml
+ 
+
+# Bunny (egg spawning)
+#
+# - The settings here control how oftne an egg is spawned.
+# - They are counted per world, not for the whole server.
+bunny:
+
+   # MinConurrentEggs
+   #
+   # - Minimum number of concurrent eggs on the map.
+   # - This is the base value for all ongoing calculation.
+   # - It can increase if more player are joining the server.
+   # - There is a grace period between collecting and respawing of an egg,
+   # - so the real numer of eggs can be lower than the configured minimum
+   # - if the players overharvest the world. 
+   minConurrentEggs: 5
+
+   # AdditionalEggsPerPlayer
+   # 
+   # - Increase number of concurrent eggs for each additional player collecting eggs.
+   # - Only players are counted which are in the same world as the egg and have 
+   # - collected at least one egg within the last 60 seconds.
+   # - Can have decimal places.
+   additionalEggsPerPlayer: 0.5
+   
+   # MaxConcurrentEggs
+   #
+   # - Maximum number of concurrent eggs on the map.
+   # - There is a hard limit of possible eggs,
+   # - set by the number of configured spawnpoints.
+   # - But you can define a lower maximum here.
+   # - Even if more players join the server and therefore the
+   # - number of spawend eggs increase, they can not exceed this limit here.
+   maxConcurrentEggs: 20
+   
+   # RespawnInterval
+   #
+   # - When a player collects an egg, the number of eggs on the map is reduced by one.
+   # - Normally this results to instantly spawning a new egg on the map 
+   # - to reach the target egg count. But this is mostly not what the 
+   # - gemedesigner wants. There should be a grace period between pickup and respawn.
+   # - This lowers the number of current eggs on the map.
+   # - (Note: The respawn does not mean the same egg or the same spawnpoint,
+   # - it does look to the number of "eggs placed" and "eggs needed").
+   # - This grace period is random, here you define the minumum and maximum in seconds. 
+   minRespawnInterval: 20
+   maxRespawnInterval: 40
+   
+   # ReduceRespawnIntervalPerPlayer
+   #
+   # - While the minRespawnInterval and maxRespawnInterval are static,
+   # - we offer the option to dynamically adjust the RespawnIntervall by
+   # - the number of active players. You can define how much the
+   # - RespawnInterval should be reduced by each player collecting eggs.
+   # - As in "additionalEggsPerPlayer", only players are counted
+   # - which are in the same world as the egg and have 
+   # - collected at least one egg within the last 15 minutes.
+   # - Can have decimal places.
+   reduceRespawnIntervalPerPlayer: 0.1
+   
+   # MaxEggLifetime
+   #
+   # - If an egg is not collected within an appropriate timeframe,
+   # - the egg will despawn. This can happens e.g. if the 
+   #-  hideout is too good for the player. So the egg
+   # - disappears, and another egg can spawn at an other 
+   # - random spawnpoint.
+   # - The value is given in seconds.
+   maxEggLifetime: 300
+
+
+# Collecting Eggs
+game:
+
+   # Select the methods which sould be used to collect the eggs.
+   # Beware: Not all mechanisms are working in all scenarios.
+   #  * A player in adventure-mode cannot use left-mouse-click.
+   #  * PickupItem can only be used on eggs of type "item".
+   #  * MoveToEgg can't be used if the egg is represented by a solid block.
+   # These are limitations of mincecraft which we can't overcome.
+   
+   # Players can collect eggs by left-clicking.
+   collectUsingPlayerLeftClick: true
+
+   # Players can collect eggs by right-clicking.
+   collectUsingPlayerRightClick: true
+
+   # Players can collect eggs moving next to the egg.
+   collectUsingPlayerMoveToEgg: false
+   
+   # Players can collect eggs using the micecraft item pickup meachanism
+   # (the player must move or stay inside the pickup-radius of the item).
+   collectUsingPlayerPickupItem: false
+
+   # Default sound settings, e.g. for the pickup-sound
+   pickupSoundVolume: 1.0
+   pickupSoundPitch: 0.0
+   
+   # The area around a spawed egg is protected for modifications,
+   # so a player cannot accidently place or remove a block when he
+   # intend to collect an egg.
+   protectedAreaAroundEggs: 2
+   
+
+# Storing rewared points (score)
+economy:
+
+   # Select the provider for the persistent store. 
+   # Possible provider are:
+   #   * NONE (no persistent store, only realtime data)
+   #   * INTERNAL (use a flat file in the plugin's config directory, only supported for small servers)
+   #   * DATABASE (not yet implemented)
+   #   * VAULT (use Vault to access an external economy system, the "currency" feature is not supported)
+   #   * CUSTOM (this plugin is sending an event where a 3rd party plugin must listen to)
+   #   * TNE (direct integration to "The New Economy" plugin, fully support of different currencies)
+   # Please drop us a mail if you need integration into other 3rd party economy plugin
+   economyProvider: INTERNAL
+
+   # Some economy gateways support the usage of currencies.
+   # Here you can define which currency should sent to them if no currency is 
+   # given in the egg configuration.   
+   defaultRewardCurrencyName: "Easterpoints"
+   
+   # Per default only the rewarded points are reported to the economy system.
+   # But if yor economy provider supports multiple currencies, here you can
+   # define an additional currency in which the collected eggs are reported.
+   eggCounterCurrencyName: "Eastereggs"
+   
+   # To setup TNE, you must set "Core/Currency/Info/Advanced" to "true"
+   # in the TNE config.yml and declare each currency as described
+   # in the TNE documentation. The currency type should be "virtual".
+   
+
+# Simple Scoreboard for the players
+scoreboard:
+
+   # EnableScoreboard
+   #
+   # - Enable or disable the whole scoreboard feature.
+   enableScoreboard: true
+   
+   # IsPermanant
+   #
+   # - If set to "true", the scoreboard is displayed all the time.
+   # - If set to "false", the scoreboard is only show when the
+   # - player is active collecting eggs or while trading.
+   isPermanant: false
+   
+   # Elements (CurrenciesToDisplay)
+   #
+   # - Define which currencies should be displayed on the scoreboard
+   elements: [Easterpoints, Eastereggs, Dragonpoints]
+   
+   # DisplayTimeout
+   #
+   # - If the scoreboard is not permamant, the scorebard gets visible
+   # - as soon as the player collects an egg or chat with a trader.
+   # - After a time without hinting for eggs,
+   # - the scoreboard automatically fades away.
+   # - Here you can set this timeout in seconds.
+   displayTimeout: 10
+   
+   # The title and names for the scoreboard are defined in messages.yml
+
+# Calendar
+calendar:
+
+   # You can start the game manually with "/ostereier game start".
+   # Or you can command the plugin to start the game automatically
+   # at a given time  (e.g. easter saturday)
+   
+   # To use this autostart-featue, you must set:
+   #  1. The date and time when the easter egg hunt starts
+   #  2. The date and time when the easter egg hunt ends
+   #  3. The worlds in which the game should start at the given time
+   
+   # Please use simple-ISO timeformat here: "YYYY-MM-DD HH:MM"
+   # The hours must be given in 24h-format.
+   # The timezone (e.g. MEST) is always local to your server.
+   
+   enableCalendar: true
+   eventStart: "2022-04-16 22:00"
+   eventEnd:   "2022-04-24 17:00"
+   worlds: [world]
+

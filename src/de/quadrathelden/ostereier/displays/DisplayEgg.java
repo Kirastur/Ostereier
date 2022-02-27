@@ -1,0 +1,26 @@
+package de.quadrathelden.ostereier.displays;
+
+import java.util.UUID;
+
+import org.bukkit.World;
+
+import de.quadrathelden.ostereier.config.design.ConfigEgg;
+import de.quadrathelden.ostereier.tools.Coordinate;
+
+public interface DisplayEgg {
+
+	public World getWorld();
+
+	public Coordinate getCoordinate();
+
+	public ConfigEgg getConfigEgg();
+
+	public UUID getUUID();
+
+	public void draw(boolean isEditor, boolean collectable);
+
+	public void undraw();
+
+	public void keepAlive();
+
+}

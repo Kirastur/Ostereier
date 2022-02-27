@@ -1,0 +1,97 @@
+name: Ostereier
+version: 1.0
+description: Ostereiersuche mit Belohnungen
+authors: [Scientarus, Kirastur]
+
+api-version: 1.16
+load: POSTWORLD
+softdepend: [Vault, TheNewEconomy]
+main: de.quadrathelden.ostereier.main.Main
+
+commands:
+  ostereier:
+    aliases: eastereggs
+    description: "Feiert Ostern mit einer Ostereiersuche"
+    permission: ostereier.command
+  osteradmin:
+    aliases: easteradmin
+    description: "Kontrolliert den Osterhasen"
+    permission: ostereier.admin
+                
+permissions:
+  ostereier.command:
+    description: "Darf den /ostereier Befehl verwenden"
+    default: op
+
+  ostereier.command.editor:
+    description: "Darf den Server in den Editormodus zum Platzieren von Ostereiern schalten"
+    default: op  
+    
+  ostereier.command.template:
+    description: "Darf im Ostereier-Editor auf ein anderes Template umschalten"
+    default: op
+    
+  ostereier.command.game:
+    description: "Darf die die Ostereiersuche starten und beenden"
+    default: op
+    
+  ostereier.command.shop:
+    description: "Darf den internen Ostereier-Shop aufrufen ohne den NPC anzusprechen"
+    default: op
+    
+  ostereier.command.list:
+    description: "Darf sich Teile der Konfiguration anzeigen lassen"
+    default: op
+
+  ostereier.command.info:
+    description: "Darf sich Echtzeit-Statusinformationen anzeigen lassen"
+    default: op
+
+  ostereier.command.reload:
+    description: "Darf die Konfiguration neu einlesen"
+    default: op
+    
+  ostereier.editor:
+    description: "Darf im Editor-Modus Ostereier setzen und wieder entfernen"
+    default: op
+    
+  ostereier.game:
+    description: "Darf im Game-Modus Ostereier suchen und einsammeln"
+    default: true
+    
+  ostereier.shop:
+    description: "Darf im internen Shop Punkte gegen Ostereier-Belohnungen eintauschen"
+    default: true
+    
+  ostereier.admin:
+    description: "Darf den /osteradmin Befehl verwenden"
+    default: op
+  
+  ostereier.notify:
+    description: "Bekommt Ostereier-Alarme und Fehlermeldungen"
+    default: op
+  
+  ostereier.command.*:
+    description: "Darf alle /ostereier Funktionen aufrufren"
+    default: false
+    children:
+      ostereier.command: true
+      ostereier.command.editor: true
+      ostereier.command.template: true
+      ostereier.command.game: true
+      ostereier.command.shop: true
+      ostereier.command.list: true
+      ostereier.command.info: true
+      ostereier.command.reload: true
+
+  ostereier.*:
+    description: "Darf Ostereier Game Master sein"
+    default: false
+    children:
+      ostereier.command.*: true
+      ostereier.editor: true
+      ostereier.game: true
+      ostereier.shop: true
+      ostereier.admn: true
+      ostereier.notify: true
+      

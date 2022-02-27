@@ -1,0 +1,17 @@
+DemoEasterFlower:
+   name: "Easter-Flower"
+   name_de: "Oster-Blume"
+   material: CORNFLOWER
+   amount: 2
+   price: 1
+
+DemoEasterArmor: 
+   name: "Golden armor of the easter bunny"
+   name_de: "Goldene Rüstung des Osterhasen"
+   description: "This armor gives you more protection,\nnot only while collecting eggs"
+   description_de: "Diese Rüstung bietet mehr Schutz,\nnicht nur beim Eieraufsammeln"
+   material: GOLDEN_CHESTPLATE
+   enchantmentType: protection
+   enchantmentLevel: 4
+   price: 5
+   currency: Dragonpoints

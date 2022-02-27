@@ -1,0 +1,30 @@
+# In thes file you can define the display name
+# for all currencies.
+#
+# Please use the currency-name as used in
+# eggs.yml and the scoreboard elements.
+#
+# You can add a locale (e.g. "_de" or "_de_de") for different languages.
+# Singular is optional. If not defined, the plural is used.
+# If plural is missing, the currency-name is used for display.
+
+singular:
+
+   Easterpoints: "Point" 
+   Eastereggs: "Easteregg"
+   Dragonpoints: "Dragon Point"
+
+   Easterpoints_de: "Punkt" 
+   Eastereggs_de: "Osterei"
+   Dragonpoints_de: "Drachenpunkt"
+
+  
+plural:
+
+   Easterpoints: "Points" 
+   Eastereggs: "Eastereggs"
+   currencyPluralDragonpoints: "Dragon Points"
+
+   Easterpoints_de: "Punkte" 
+   Eastereggs_de: "Ostereier"
+   Dragonpoints_de: "Drachenpunkte"

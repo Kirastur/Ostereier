@@ -1,0 +1,18 @@
+demo1:
+   material: CAT_SPAWN_EGG
+   rewardAmount: 1
+   pickupSound: ENTITY_ITEM_PICKUP
+demo2:
+   material: CAVE_SPIDER_SPAWN_EGG
+   rewardAmount: 2
+   pickupSound: ENTITY_ITEM_PICKUP
+demo3:
+   material: CREEPER_SPAWN_EGG
+   rewardAmount: 5
+   pickupSound: ENTITY_ITEM_PICKUP
+demo4:
+   material: DRAGON_EGG
+   mode: BLOCK
+   rewardAmount: 1
+   rewardCurrency: Dragonpoints
+   pickupSound: ENTITY_ENDER_DRAGON_GROWL
