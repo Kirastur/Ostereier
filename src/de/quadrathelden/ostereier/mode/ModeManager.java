@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import de.quadrathelden.ostereier.api.OstereierOrchestrator;
+import de.quadrathelden.ostereier.chunktickets.ChunkTicketManager;
 import de.quadrathelden.ostereier.config.ConfigManager;
 import de.quadrathelden.ostereier.config.design.ConfigDesign;
 import de.quadrathelden.ostereier.config.subsystem.ConfigCalendar;
@@ -34,11 +35,13 @@ public class ModeManager {
 	public static final String TEXT_CALENDAR_RELOAD_INFO = "reloadCalendarInfo";
 	public static final String TEXT_GAME_START = "calendarGameStart";
 	public static final String TEXT_GAME_STOP = "calendarGameStop";
+	public static final String TEXT_SANITY_EGGS_REMOVED = "sanityEggsRemoved";
 
 	protected final Plugin plugin;
 	protected final TextManager textManager;
 	protected final ConfigManager configManager;
 	protected final PermissionManager permissionManager;
+	protected final ChunkTicketManager chunkTicketManager;
 	protected final EconomyManager economyManager;
 	protected final DisplayManager displayManager;
 	protected final EditorManager editorManager;
@@ -57,6 +60,7 @@ public class ModeManager {
 		this.textManager = orchestrator.getTextManager();
 		this.configManager = orchestrator.getConfigManager();
 		this.permissionManager = orchestrator.getPermissionManager();
+		this.chunkTicketManager = orchestrator.getChunkTicketManager();
 		this.economyManager = orchestrator.getEconomyManager();
 		this.displayManager = orchestrator.getDisplayManager();
 		this.editorManager = orchestrator.getEditorManager();
@@ -179,6 +183,18 @@ public class ModeManager {
 		}
 		printDesignInfo(initiator);
 		printCalendarInfo(initiator);
+	}
+
+	public int sanityCheck(CommandSender initiator, World world) {
+		int count = displayManager.repairEggs(world);
+		if ((count > 0) && (initiator != null)) {
+			String sanityInfo = textManager.findText(TEXT_SANITY_EGGS_REMOVED, initiator);
+			if (!sanityInfo.isEmpty()) {
+				sanityInfo = String.format(sanityInfo, count, world.getName());
+				initiator.sendMessage(sanityInfo);
+			}
+		}
+		return count;
 	}
 
 	protected void sendNotify(String s) {
@@ -306,6 +322,7 @@ public class ModeManager {
 		displayManager.disable();
 		scoreboardManager.disable();
 		economyManager.disable();
+		chunkTicketManager.disable();
 	}
 
 }

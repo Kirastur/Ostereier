@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -307,6 +308,28 @@ public class CommandUtils {
 	}
 
 	//
+	// Other calculations
+	//
+	
+	public static Player getNearestPlayer(Location sourcelocation) {
+		Player targetPlayer = null;
+		double targetDistance = 0.0;
+		for (Player myPlayer : sourcelocation.getWorld().getPlayers()) {
+			if (targetPlayer == null) {
+				targetPlayer = myPlayer;
+				targetDistance = targetPlayer.getLocation().distance(sourcelocation);
+			} else {
+				double myDistance = myPlayer.getLocation().distance(sourcelocation);
+				if (myDistance < targetDistance) {
+					targetPlayer = myPlayer;
+					targetDistance = myDistance;
+				}
+			}
+		}
+		return targetPlayer;
+	}
+
+	//
 	// Wrap API Calls
 	//
 
@@ -380,6 +403,10 @@ public class CommandUtils {
 
 	protected static void openShopGui(Player player) throws OstereierException {
 		getAPI().openShopGui(player);
+	}
+
+	protected static int sanityCheck(CommandSender initiator, World world) {
+		return getAPI().sanityCheck(initiator, world);
 	}
 
 	protected static void reload(CommandSender sender) throws OstereierException {

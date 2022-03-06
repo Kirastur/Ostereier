@@ -3,11 +3,15 @@ package de.quadrathelden.ostereier.commands;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import de.quadrathelden.ostereier.exception.OstereierException;
 import de.quadrathelden.ostereier.main.Main;
@@ -78,8 +82,31 @@ public class AdminCommand implements CommandExecutor {
 		CommandUtils.adjustGameToCalendarInAllWorlds();
 	}
 
+	protected void cmdCheckWorld(CommandSender sender, World world) {
+		int i = CommandUtils.sanityCheck(sender, world);
+		if (i == 0) {
+			sender.sendMessage(CommandUtils.findText(Message.OK.name(), sender));
+		}
+	}
+
 	protected void cmdShop(Player player) throws OstereierException {
 		CommandUtils.openShopGui(player);
+	}
+
+	protected void cmdShopNearest(CommandSender sender) throws OstereierException {
+		Location sourceLocation = null;
+		if (sender instanceof Entity entity) {
+			sourceLocation = entity.getLocation();
+		}
+		if (sender instanceof BlockCommandSender blockCommandSender) {
+			sourceLocation = blockCommandSender.getBlock().getLocation().add(new Vector(0.5, 0.0, 0.5));
+		}
+		if (sourceLocation != null) {
+			Player player = CommandUtils.getNearestPlayer(sourceLocation);
+			if (player != null) {
+				CommandUtils.openShopGui(player);
+			}
+		}
 	}
 
 	protected void cmdInfo(CommandSender sender) {
@@ -127,8 +154,14 @@ public class AdminCommand implements CommandExecutor {
 		case GAMEAUTOALL:
 			cmdGameAutoAll();
 			break;
+		case CHECKWORLD:
+			cmdCheckWorld(sender, world);
+			break;
 		case SHOP:
 			cmdShop(player);
+			break;
+		case SHOPNEAREST:
+			cmdShopNearest(sender);
 			break;
 		case INFO:
 			cmdInfo(sender);

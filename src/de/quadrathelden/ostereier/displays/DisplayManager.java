@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -13,6 +14,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 
 import de.quadrathelden.ostereier.api.OstereierOrchestrator;
+import de.quadrathelden.ostereier.chunktickets.ChunkTicketManager;
 import de.quadrathelden.ostereier.config.ConfigManager;
 import de.quadrathelden.ostereier.config.design.ConfigEgg;
 import de.quadrathelden.ostereier.config.design.ConfigSpawnpoint;
@@ -27,6 +29,7 @@ public class DisplayManager {
 	protected final Plugin plugin;
 	protected final ConfigManager configManager;
 	protected final EventManager eventManager;
+	protected final ChunkTicketManager chunkTicketManager;
 
 	protected List<DisplayEgg> displayEggs = new ArrayList<>();
 
@@ -34,6 +37,7 @@ public class DisplayManager {
 		this.plugin = orchestrator.getPlugin();
 		this.configManager = orchestrator.getConfigManager();
 		this.eventManager = orchestrator.getEventManager();
+		this.chunkTicketManager = orchestrator.getChunkTicketManager();
 		if (getUuidNamespacedKey() == null) {
 			setUuidNamespacedKey(new NamespacedKey(plugin, NAMESPACE_UUID));
 		}
@@ -112,6 +116,7 @@ public class DisplayManager {
 		if (newDisplayEgg == null) {
 			return null;
 		}
+		chunkTicketManager.addChunkTicket(newDisplayEgg, world, coordinate);
 		newDisplayEgg.draw(isEditor, collectable);
 		displayEggs.add(newDisplayEgg);
 		return newDisplayEgg;
@@ -120,6 +125,7 @@ public class DisplayManager {
 	public void undrawEgg(DisplayEgg oldDisplayEgg) {
 		displayEggs.remove(oldDisplayEgg);
 		oldDisplayEgg.undraw();
+		chunkTicketManager.removeChunkTicket(oldDisplayEgg);
 	}
 
 	public void undrawEgg(World world, Coordinate coordinate) {
@@ -146,6 +152,19 @@ public class DisplayManager {
 				undrawEgg(myDisplayEgg);
 			}
 		}
+	}
+	
+	public int repairEggs(World world) {
+		int count = 0;
+		List<Item> items = new ArrayList<>(world.getEntitiesByClass(Item.class));
+		for (Item myItem : items) {
+			UUID myUUID = readDisplaySeal(myItem.getItemStack()); 
+			if (myUUID != null && (findDisplayEgg(myUUID) == null)) {
+				myItem.remove();
+				count = count +1;
+			}
+		}
+		return count;
 	}
 
 	public void handleScheduler() {

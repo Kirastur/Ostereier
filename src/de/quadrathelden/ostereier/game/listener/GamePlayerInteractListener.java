@@ -68,7 +68,7 @@ public class GamePlayerInteractListener implements Listener {
 			if ((action == Action.LEFT_CLICK_BLOCK) && configManager.getConfigGame().isCollectUsingPlayerLeftClick()) {
 				wasEgg = gameManager.playerClickToCollect(player, block.getLocation(), event.getBlockFace());
 			}
-			if ((action == Action.RIGHT_CLICK_BLOCK) && configManager.getConfigGame().isCollectUsingPlayerLeftClick()) {
+			if ((action == Action.RIGHT_CLICK_BLOCK) && configManager.getConfigGame().isCollectUsingPlayerRightClick()) {
 				wasEgg = gameManager.playerClickToCollect(player, block.getLocation(), event.getBlockFace());
 			}
 			if (wasEgg) {

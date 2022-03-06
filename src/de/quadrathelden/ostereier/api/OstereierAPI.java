@@ -309,6 +309,10 @@ public class OstereierAPI {
 		modeManager.reload(initiator);
 	}
 
+	public int sanityCheck(CommandSender initiator, World world) {
+		return modeManager.sanityCheck(initiator, world);
+	}
+
 	// Disable
 	public boolean isDisabled() {
 		return modeManager.isDisabled();

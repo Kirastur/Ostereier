@@ -13,6 +13,7 @@ import org.bukkit.plugin.Plugin;
 import de.quadrathelden.ostereier.api.OstereierOrchestrator;
 import de.quadrathelden.ostereier.bunny.Bunny;
 import de.quadrathelden.ostereier.bunny.DefaultBunny;
+import de.quadrathelden.ostereier.chunktickets.ChunkTicketManager;
 import de.quadrathelden.ostereier.config.ConfigManager;
 import de.quadrathelden.ostereier.config.design.ConfigEgg;
 import de.quadrathelden.ostereier.config.design.ConfigSpawnpoint;
@@ -38,6 +39,7 @@ public class GameManager {
 	protected final ConfigManager configManager;
 	protected final PermissionManager permissionManager;
 	protected final EventManager eventManager;
+	protected final ChunkTicketManager chunkTicketManager;
 	protected final EconomyManager economyManager;
 	protected final ScoreboardManager scoreboardManager;
 	protected final DisplayManager displayManager;
@@ -51,6 +53,7 @@ public class GameManager {
 		this.configManager = orchestrator.getConfigManager();
 		this.permissionManager = orchestrator.getPermissionManager();
 		this.eventManager = orchestrator.getEventManager();
+		this.chunkTicketManager = orchestrator.getChunkTicketManager();
 		this.economyManager = orchestrator.getEconomyManager();
 		this.scoreboardManager = orchestrator.getScoreboardManager();
 		this.displayManager = orchestrator.getDisplayManager();
@@ -122,6 +125,7 @@ public class GameManager {
 		gameWorlds.remove(oldGameWorld);
 		eventManager.sendGameStopEvent(oldGameWorld.getWorld(), oldGameWorld.getPlayerScores());
 		gameListener.updateListener();
+		chunkTicketManager.removeAllFromWorld(oldGameWorld.getWorld());
 	}
 
 	public void stopGame(World world) {

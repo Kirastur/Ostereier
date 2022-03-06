@@ -32,6 +32,10 @@ reloadCalendarInfo: "The easteregg-event starts at %s and ends at %s"
 reloadDesignInfo_de: "%d Eier, %d Templates und %d Spawnpoints geladen"
 reloadCalendarInfo_de: "Das Ostereier-Event startet am %s und endet am %s"
 
+# Sanity Check
+sanityEggsRemoved: "%d orphant eggs removed from %s"
+sanityEggsRemoved_de: "%d herrenlose Eier aus %s weggeräumt"
+
 
 # Commands
 commandEditorStart: "The editor is now active"

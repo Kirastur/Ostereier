@@ -3,6 +3,7 @@ package de.quadrathelden.ostereier.api;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
+import de.quadrathelden.ostereier.chunktickets.ChunkTicketManager;
 import de.quadrathelden.ostereier.config.ConfigManager;
 import de.quadrathelden.ostereier.displays.DisplayManager;
 import de.quadrathelden.ostereier.economy.EconomyManager;
@@ -26,6 +27,7 @@ public class OstereierOrchestrator {
 	private final ConfigManager configManager;
 	private final PermissionManager permissionManager;
 	private final EventManager eventManager;
+	private final ChunkTicketManager chunkTicketManager;
 	private final EconomyManager economyManager;
 	private final ScoreboardManager scoreboardManager;
 	private final DisplayManager displayManager;
@@ -46,6 +48,7 @@ public class OstereierOrchestrator {
 		configManager = createConfigManager();
 		permissionManager = createPermissionManager();
 		eventManager = createEventManager();
+		chunkTicketManager = createChunkTicketManager();
 		economyManager = createEconomyManager();
 		scoreboardManager = createScoreboardManager();
 		displayManager = createDisplayManager();
@@ -75,6 +78,10 @@ public class OstereierOrchestrator {
 
 	public EventManager getEventManager() {
 		return eventManager;
+	}
+	
+	public ChunkTicketManager getChunkTicketManager() {
+		return chunkTicketManager;
 	}
 
 	public EconomyManager getEconomyManager() {
@@ -120,6 +127,10 @@ public class OstereierOrchestrator {
 
 	protected EventManager createEventManager() {
 		return new EventManager(this);
+	}
+	
+	protected ChunkTicketManager createChunkTicketManager() {
+		return new ChunkTicketManager(this);
 	}
 
 	protected EconomyManager createEconomyManager() {

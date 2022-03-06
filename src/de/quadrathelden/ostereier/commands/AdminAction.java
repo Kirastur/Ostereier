@@ -12,7 +12,9 @@ public enum AdminAction implements Action {
 	GAMESTOP("gamestop", WORLDS),
 	GAMEAUTO("gameauto", WORLDS),
 	GAMEAUTOALL("gameautoall", NONE),
+	CHECKWORLD("checkworld", WORLDS),
 	SHOP("shop", PLAYER),
+	SHOPNEAREST("shopnearest", NONE),
 	INFO("info", NONE),
 	RELOAD("reload", NONE),
 	HELP("help", NONE);

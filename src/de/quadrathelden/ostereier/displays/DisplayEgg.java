@@ -4,10 +4,11 @@ import java.util.UUID;
 
 import org.bukkit.World;
 
+import de.quadrathelden.ostereier.chunktickets.ChunkTicketOwner;
 import de.quadrathelden.ostereier.config.design.ConfigEgg;
 import de.quadrathelden.ostereier.tools.Coordinate;
 
-public interface DisplayEgg {
+public interface DisplayEgg extends ChunkTicketOwner {
 
 	public World getWorld();
 

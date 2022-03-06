@@ -79,7 +79,7 @@ public class OstereierCommand implements CommandExecutor {
 				CommandUtils.stopGame(world);
 			}
 			if (gameMode == ParamStartStopAuto.AUTO) {
-				if (!CommandUtils.adjustGameToCalendar(world)) { //NOSONAR
+				if (!CommandUtils.adjustGameToCalendar(world)) { // NOSONAR
 					return;
 				}
 			}

@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import de.quadrathelden.ostereier.api.OstereierOrchestrator;
+import de.quadrathelden.ostereier.chunktickets.ChunkTicketManager;
 import de.quadrathelden.ostereier.config.ConfigManager;
 import de.quadrathelden.ostereier.config.design.ConfigEgg;
 import de.quadrathelden.ostereier.config.design.ConfigSpawnpoint;
@@ -32,6 +33,7 @@ public class EditorManager {
 	protected final ConfigManager configManager;
 	protected final PermissionManager permissionManager;
 	protected final EventManager eventManager;
+	protected final ChunkTicketManager chunkTicketManager;
 	protected final DisplayManager displayManager;
 
 	protected EditorListener editorListener = null;
@@ -48,6 +50,7 @@ public class EditorManager {
 		this.configManager = orchestrator.getConfigManager();
 		this.permissionManager = orchestrator.getPermissionManager();
 		this.eventManager = orchestrator.getEventManager();
+		this.chunkTicketManager = orchestrator.getChunkTicketManager();
 		this.displayManager = orchestrator.getDisplayManager();
 		this.editorListener = new EditorListener(plugin, textManager, configManager, permissionManager, this);
 	}
@@ -307,6 +310,7 @@ public class EditorManager {
 		}
 		disableListener();
 		undrawAllEggs();
+		chunkTicketManager.removeAllFromWorld(editorWorld);
 		editorWorld = null;
 		sendStatusMessageToAll();
 		sendEditorChangeEvent();
