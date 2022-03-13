@@ -203,24 +203,6 @@ public class OstereierAPI {
 		editorManager.playerRemoveClick(clickLocation, blockFace);
 	}
 
-	public void enterEditorMode(World world) throws OstereierException {
-		modeManager.validateEditorPrerequisits(world);
-		editorManager.enterEditorMode(world);
-	}
-
-	public void enterEditorMode(World world, ConfigTemplate initialTemplate, boolean isHidden)
-			throws OstereierException {
-		modeManager.validateEditorPrerequisits(world);
-		editorManager.enterEditorMode(world, initialTemplate, isHidden);
-	}
-
-	public void leaveEditorMode() throws OstereierException {
-		if (!isEditorActive()) {
-			throw new OstereierException(Message.API_EDITOR_NOT_ACTIVE);
-		}
-		editorManager.leaveEditorMode();
-	}
-
 	public void refreshEditorEggs() throws OstereierException {
 		if (!isEditorActive()) {
 			throw new OstereierException(Message.API_EDITOR_NOT_ACTIVE);
@@ -247,15 +229,6 @@ public class OstereierAPI {
 
 	public List<PlayerScore> getPlayerScores(World world) {
 		return gameManager.getPlayerScores(world);
-	}
-
-	public void startGame(World world) throws OstereierException {
-		modeManager.validateGamePrerequisits(world);
-		gameManager.startGame(world);
-	}
-
-	public void stopGame(World world) {
-		gameManager.stopGame(world);
 	}
 
 	public boolean playerClickToCollect(Player player, Location clickLocation, BlockFace blockFace)
@@ -292,25 +265,47 @@ public class OstereierAPI {
 		return shopManager.openShopGui(player);
 	}
 
-	// Mode Manager
+	// Mode Manager StateEngine
+	public void enterEditorMode(CommandSender initiator, World world) throws OstereierException {
+		modeManager.enterEditorMode(initiator, world);
+	}
+
+	public void enterEditorMode(CommandSender initiator, World world, ConfigTemplate initialTemplate, boolean isHidden)
+			throws OstereierException {
+		modeManager.enterEditorMode(initiator, world, initialTemplate, isHidden);
+	}
+
+	public void leaveEditorMode(CommandSender initiator) throws OstereierException {
+		modeManager.leaveEditorMode(initiator);
+	}
+
+	public void startGame(CommandSender initiator, World world) throws OstereierException {
+		modeManager.startGame(initiator, world);
+	}
+
+	public void stopGame(CommandSender initiator, World world) {
+		modeManager.stopGame(initiator, world);
+	}
+
+	// ModeManager Calendar
 	public boolean isCalendarActive() {
 		return modeManager.isCalendarActive();
 	}
 
-	public boolean adjustGameToCalendar(World world) throws OstereierException {
-		return modeManager.adjustGameToCalendar(world);
+	public boolean adjustGameToCalendar(CommandSender initiator, World world) throws OstereierException {
+		return modeManager.adjustGameToCalendar(initiator, world);
 	}
 
-	public void adjustGameToCalendarInAllWorlds() throws OstereierException {
-		modeManager.adjustGameToCalendarInAllWorlds();
+	public void adjustGameToCalendarInAllWorlds(CommandSender initiator) throws OstereierException {
+		modeManager.adjustGameToCalendarInAllWorlds(initiator);
 	}
 
 	public void reload(CommandSender initiator) throws OstereierException {
 		modeManager.reload(initiator);
 	}
 
-	public int sanityCheck(CommandSender initiator, World world) {
-		return modeManager.sanityCheck(initiator, world);
+	public int performSanityCheck(CommandSender initiator, World world) {
+		return modeManager.performSanityCheck(initiator, world);
 	}
 
 	// Disable

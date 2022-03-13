@@ -10,32 +10,22 @@ import de.quadrathelden.ostereier.config.ConfigManager;
 import de.quadrathelden.ostereier.config.design.ConfigEgg;
 import de.quadrathelden.ostereier.config.subsystem.ConfigEconomy;
 import de.quadrathelden.ostereier.exception.OstereierException;
+import de.quadrathelden.ostereier.integrations.IntegrationManager;
+import de.quadrathelden.ostereier.integrations.TNEIntegration;
 import de.quadrathelden.ostereier.tools.Message;
-import net.tnemc.core.TNE;
-import net.tnemc.core.common.api.TNEAPI;
-import net.tnemc.core.common.currency.TNECurrency;
 
 public class TNEEconomyProvider implements EconomyProvider {
 
 	protected final ConfigManager configManager;
-	protected final TNEAPI tneAPI;
+	protected final TNEIntegration tne;
 
-	public TNEEconomyProvider(ConfigManager configManager) throws OstereierException {
+	public TNEEconomyProvider(ConfigManager configManager, IntegrationManager integrationManager) throws OstereierException {
 		this.configManager = configManager;
-		tneAPI = TNE.instance().api();
-		if (tneAPI == null) {
+		tne = integrationManager.getTNEImplementation();
+		if (tne == null) {
 			throw new OstereierException(Message.ECONOMY_TNE_NOT_AVAIL);
 		}
 		checkCurrencies();
-	}
-
-	protected TNECurrency findCurrency(String currencyName) throws OstereierException {
-		for (TNECurrency myCurrency : tneAPI.getCurrencies()) {
-			if (myCurrency.getIdentifier().equals(currencyName)) {
-				return myCurrency;
-			}
-		}
-		throw new OstereierException(null, Message.ECONOMY_TNE_CURRENCY_MISSING, currencyName);
 	}
 
 	protected void checkCurrencies() throws OstereierException {
@@ -50,7 +40,7 @@ public class TNEEconomyProvider implements EconomyProvider {
 		currencyNames.add(configEconomy.getEggCounterCurrencyName());
 		currencyNames.add(configEconomy.getDefaultRewardCurrencyName());
 		for (String myCurrencyName : currencyNames) {
-			findCurrency(myCurrencyName);
+			tne.validateCurrency(myCurrencyName);
 		}
 	}
 
@@ -61,34 +51,32 @@ public class TNEEconomyProvider implements EconomyProvider {
 
 	@Override
 	public int getEggs(OfflinePlayer player) throws OstereierException {
-		TNECurrency tneCurrency = findCurrency(configManager.getConfigEconomy().getEggCounterCurrencyName());
-		return tneAPI.getHoldings(player.getUniqueId().toString(), tneCurrency).intValue();
+		String currency = configManager.getConfigEconomy().getEggCounterCurrencyName();
+		return tne.getHoldings(player.getUniqueId().toString(), currency).intValue();
 	}
 
 	@Override
 	public void incrementEggs(OfflinePlayer player) throws OstereierException {
-		String currencyName = configManager.getConfigEconomy().getEggCounterCurrencyName();
-		TNECurrency tneCurrency = findCurrency(currencyName);
-		if (!tneAPI.addHoldings(player.getUniqueId().toString(), BigDecimal.valueOf(1), tneCurrency)) {
-			throw new OstereierException(null, Message.ECONOMY_TNE_ERROR, currencyName);
+		String currency = configManager.getConfigEconomy().getEggCounterCurrencyName();
+		if (!tne.addHoldings(player.getUniqueId().toString(), BigDecimal.valueOf(1), currency)) {
+			throw new OstereierException(null, Message.ECONOMY_TNE_ERROR, currency);
 		}
 	}
 
 	@Override
 	public void setEggs(OfflinePlayer player, int newEggAmount) throws OstereierException {
-		String currencyName = configManager.getConfigEconomy().getEggCounterCurrencyName();
-		TNECurrency tneCurrency = findCurrency(currencyName);
-		int oldEggAmount = tneAPI.getHoldings(player.getUniqueId().toString(), tneCurrency).intValue();
+		String currency = configManager.getConfigEconomy().getEggCounterCurrencyName();
+		int oldEggAmount = tne.getHoldings(player.getUniqueId().toString(), currency).intValue();
 		if (oldEggAmount < newEggAmount) {
 			int i = newEggAmount - oldEggAmount;
-			if (!tneAPI.addHoldings(player.getUniqueId().toString(), BigDecimal.valueOf(i), tneCurrency)) {
-				throw new OstereierException(null, Message.ECONOMY_TNE_ERROR, currencyName);
+			if (!tne.addHoldings(player.getUniqueId().toString(), BigDecimal.valueOf(i), currency)) {
+				throw new OstereierException(null, Message.ECONOMY_TNE_ERROR, currency);
 			}
 		}
 		if (oldEggAmount > newEggAmount) {
 			int i = oldEggAmount - newEggAmount;
-			if (!tneAPI.removeHoldings(player.getUniqueId().toString(), BigDecimal.valueOf(i), tneCurrency)) {
-				throw new OstereierException(null, Message.ECONOMY_TNE_ERROR, currencyName);
+			if (!tne.removeHoldings(player.getUniqueId().toString(), BigDecimal.valueOf(i), currency)) {
+				throw new OstereierException(null, Message.ECONOMY_TNE_ERROR, currency);
 			}
 		}
 	}
@@ -98,8 +86,7 @@ public class TNEEconomyProvider implements EconomyProvider {
 		if ((currency == null) || currency.isEmpty()) {
 			currency = configManager.getConfigEconomy().getDefaultRewardCurrencyName();
 		}
-		TNECurrency tneCurrency = findCurrency(currency);
-		return tneAPI.getHoldings(player.getUniqueId().toString(), tneCurrency).intValue();
+		return tne.getHoldings(player.getUniqueId().toString(), currency).intValue();
 	}
 
 	@Override
@@ -107,8 +94,7 @@ public class TNEEconomyProvider implements EconomyProvider {
 		if ((currency == null) || currency.isEmpty()) {
 			currency = configManager.getConfigEconomy().getDefaultRewardCurrencyName();
 		}
-		TNECurrency tneCurrency = findCurrency(currency);
-		if (!tneAPI.addHoldings(player.getUniqueId().toString(), BigDecimal.valueOf(pointsToAdd), tneCurrency)) {
+		if (!tne.addHoldings(player.getUniqueId().toString(), BigDecimal.valueOf(pointsToAdd), currency)) {
 			throw new OstereierException(null, Message.ECONOMY_TNE_ERROR, currency);
 		}
 	}
@@ -118,8 +104,7 @@ public class TNEEconomyProvider implements EconomyProvider {
 		if ((currency == null) || currency.isEmpty()) {
 			currency = configManager.getConfigEconomy().getDefaultRewardCurrencyName();
 		}
-		TNECurrency tneCurrency = findCurrency(currency);
-		if (!tneAPI.removeHoldings(player.getUniqueId().toString(), BigDecimal.valueOf(pointsToRemove), tneCurrency)) {
+		if (!tne.removeHoldings(player.getUniqueId().toString(), BigDecimal.valueOf(pointsToRemove), currency)) {
 			throw new OstereierException(null, Message.ECONOMY_TNE_ERROR, currency);
 
 		}

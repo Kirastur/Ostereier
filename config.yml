@@ -56,6 +56,16 @@ startup:
    # - and regsiter it as API.
    # - Use this option only if you customize the Java objects itself.
    passiveMode: false
+   
+   # initialSanityCheckDelay
+   #
+   # - The sanity check removes orphaned eggs (e.g. from a server crash).
+   # - This check can run a few seconds after the server start,
+   # - when the initial world loading has finished.
+   # - Here you can set the start delay for this one-time-check.
+   # - Set this to "0" if you wand to disable the ckeck.
+   # - The delay is given in seconds.
+   initialSanityCheckDelay: 10
 
 
 # Editor (place eggs)
@@ -236,6 +246,7 @@ scoreboard:
    
    # The title and names for the scoreboard are defined in messages.yml
 
+
 # Calendar
 calendar:
 
@@ -257,3 +268,43 @@ calendar:
    eventEnd:   "2022-04-24 17:00"
    worlds: [world]
 
+
+# Periodical sanity check
+sanity:
+
+   # The sanity check removes orphant eggs (e.g. from a server crash).
+   # This is the same as in "initialSanityCheckDelay", except the check here
+   # is executed periodically, and not one-time at server start.
+   enablePeriodicSanityCheck: true
+   
+   # The time between two checks is given in seconds.
+   # Default is one hour.
+   checkInterval: 3600
+   
+
+# Citizens NPC integration 
+npc:
+
+   # You can open the shop by talking to a NPC.
+   # This is done using the 3rd party plugin "citizens".
+   # Please see 
+   #  https://www.spigotmc.org/resources/citizens.13811/
+
+   # enableCitizensIntegration
+   #
+   # - Enables the integration. If set to true, you must have 
+   # - installed citizens on you server, or the plugin start will fail.
+   enableCitizensIntegration: false
+  
+   # npcName
+   #
+   # - ID or the name of the NPC. You can define only one NPC here.
+   npcName: Osterhase
+  
+   # openShopUsingLeftMouseclick, openShopUsingLeftMouseclick
+   #
+   # - Here you specify how your players should interact with the NPC
+   # - to open the shop. Currently avail are left and right mouse click.
+   openShopUsingLeftMouseclick: true
+   openShopUsingRightMouseclick: true
+  

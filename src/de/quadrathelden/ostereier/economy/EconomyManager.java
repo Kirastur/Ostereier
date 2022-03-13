@@ -6,6 +6,7 @@ import de.quadrathelden.ostereier.api.OstereierOrchestrator;
 import de.quadrathelden.ostereier.config.ConfigManager;
 import de.quadrathelden.ostereier.events.EventManager;
 import de.quadrathelden.ostereier.exception.OstereierException;
+import de.quadrathelden.ostereier.integrations.IntegrationManager;
 import de.quadrathelden.ostereier.tools.Message;
 
 public class EconomyManager {
@@ -13,12 +14,14 @@ public class EconomyManager {
 	protected final Plugin plugin;
 	protected final ConfigManager configManager;
 	protected final EventManager eventManager;
+	protected final IntegrationManager integrationManager;
 	protected EconomyProvider economyProvider = new NoneEconomyProvider();
 
 	public EconomyManager(OstereierOrchestrator orchestrator) {
 		this.plugin = orchestrator.getPlugin();
 		this.configManager = orchestrator.getConfigManager();
 		this.eventManager = orchestrator.getEventManager();
+		this.integrationManager = orchestrator.getIntegrationManager();
 	}
 
 	protected EconomyProvider getCustomEconomyProvider() throws OstereierException {
@@ -39,10 +42,10 @@ public class EconomyManager {
 			economyProvider = getCustomEconomyProvider();
 			break;
 		case VAULT:
-			economyProvider = new VaultEconomyProvider(plugin, configManager);
+			economyProvider = new VaultEconomyProvider(configManager, integrationManager);
 			break;
 		case TNE:
-			economyProvider = new TNEEconomyProvider(configManager);
+			economyProvider = new TNEEconomyProvider(configManager, integrationManager);
 			break;
 		default:
 			economyProvider = new NoneEconomyProvider();

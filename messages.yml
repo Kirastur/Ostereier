@@ -18,12 +18,24 @@ shopTitle_de: "Ostereier-Shop"
 shopSellAmount_de: "Verkaufsmenge"
 shopFinancialAssets_de: "Dein aktuelles Vermögen"
 
-# Calendar
-calendarGameStart: "The easteregg-game started in: %s"
-calendarGameStop: "The easteregg-game stopped in: %s"
+# StateEngine
+stateEditorStart: "The editor is now active in %s"
+stateEditorStop: "The editor has ended now"
+stateGameStart: "The easteregg-game started in %s"
+stateGameStop: "The easteregg-game stopped in %s"
 
-calendarGameStart_de: "Das Ostereier-Spiel wurde gestartet in: %s"
-calendarGameStop_de: "Das Ostereier-Spiel wurde beendet in: %s"
+stateEditorStart_de: "Der Editor ist nun in %s aktiv"
+stateEditorStop_de: "Der Editor ist nun beendet"
+stateGameStart_de: "Das Ostereier-Spiel wurde in %s gestartet"
+stateGameStop_de: "Das Ostereier-Spiel wurde in %s beendet"
+
+# Calendar
+calendarInfo: "Calendar time reached. Applying autostart-rules"
+calendarInfo_de: "Kalender Zeitpunkt erreicht. Wende Autostart-Regeln an"
+
+# Sanity Check
+sanityEggsRemoved: "%d orphaned eggs removed from %s"
+sanityEggsRemoved_de: "%d herrenlose Eier aus %s weggeräumt"
 
 # Reload
 reloadDesignInfo: "%d eggs, %d templates and %d spawnpoints loaded"
@@ -32,25 +44,14 @@ reloadCalendarInfo: "The easteregg-event starts at %s and ends at %s"
 reloadDesignInfo_de: "%d Eier, %d Templates und %d Spawnpoints geladen"
 reloadCalendarInfo_de: "Das Ostereier-Event startet am %s und endet am %s"
 
-# Sanity Check
-sanityEggsRemoved: "%d orphant eggs removed from %s"
-sanityEggsRemoved_de: "%d herrenlose Eier aus %s weggeräumt"
 
 
 # Commands
-commandEditorStart: "The editor is now active"
-commandEditorStop: "The editor has ended now"
-commandGameStart: "The game is now active in %s"
-commandGameStop: "The game has now ended in %s"
 commandInfoEditor: "The editor is active in world: %s"
 commandInfoGame: "The game is active in worlds: %s"
 commandInfoNone: "Editor and Game are not active"
 commandHelp: "Valid actions are: %s"
 
-commandEditorStart_de: "Der Editor ist nun aktiv"
-commandEditorStop_de: "Der Editor ist nun beendet"
-commandGameStart_de: "Die Ostereier werden jetzt in der Welt \"%s\" versteckt"
-commandGameStop_de: "Die Ostereiersuche ist jetzt in der Welt \"%s\" beendet"
 commandInfoEditor_de: "Der Editor ist aktiv in der Welt: %s"
 commandInfoGame_de: "Die Ostereisuche läuft in den Welten: %s"
 commandInfoNone_de: "Editor und Suche sind nicht aktiv"
@@ -128,6 +129,7 @@ MODE_GAME_RUNNING: "In at least one world the game is started"
 MODE_MULTIWORLD_SETUP_WRONG: "In multiworld mode you must place all eggs in one editor world. Please fix your setup"
 MODE_MULTIWORLD_EDITOR_WRONG: "In multiworld mode you must place all eggs in one editor world. Please use that word for further editing"
 MODE_GAME_ALREADY_ACTIVE: "The game is already started in this world"
+MODE_CITIZENS_INTEGRATION_FAILED: "Could not find Citizens plugin"
 
 API_EDITOR_NOT_ACTIVE: "The easteregg editor is not active"
 
@@ -215,7 +217,8 @@ MODE_ECONOMY_PROVIDER_NOT_READY_de: "Der Economy Provider ist noch nicht bereit"
 MODE_GAME_RUNNING_de: "Die Ostereier-Suche ist in mindestens einer Welt gestartet"
 MODE_MULTIWORLD_SETUP_WRONG_de: "Im Multiworld-Mode kann nur eine Welt für den Editor verwendet werden. Bitte überprüfe Dein Setup"
 MODE_MULTIWORLD_EDITOR_WRONG_de: "Im Multiworld-Mode kann nur eine Welt für den Editor verwendet werden"
-MODE_GAME_ALREADY_ACTIVE: "Die Ostereier-Suche ist in dieser Welt schon aktiv"
+MODE_GAME_ALREADY_ACTIVE_de: "Die Ostereier-Suche ist in dieser Welt schon aktiv"
+MODE_CITIZENS_INTEGRATION_FAILED_de: "Citizens Plugin nicht gefunden"
 
 API_EDITOR_NOT_ACTIVE_de: "Der Ostereier-Editor ist nicht aktiv"
 

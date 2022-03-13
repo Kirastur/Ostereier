@@ -17,10 +17,6 @@ import de.quadrathelden.ostereier.tools.Message;
 
 public class OstereierCommand implements CommandExecutor {
 
-	public static final String TEXT_EDITOR_START = "commandEditorStart";
-	public static final String TEXT_EDITOR_STOP = "commandEditorStop";
-	public static final String TEXT_GAME_START = "commandGameStart";
-	public static final String TEXT_GAME_STOP = "commandGameStop";
 	public static final String TEXT_INFO_EDITOR = "commandInfoEditor";
 	public static final String TEXT_INFO_GAME = "commandInfoGame";
 	public static final String TEXT_INFO_NONE = "commandInfoNone";
@@ -52,14 +48,12 @@ public class OstereierCommand implements CommandExecutor {
 
 	protected void cmdEditor(CommandSender sender, ParamStartStop editorMode) throws OstereierException {
 		if (editorMode == ParamStartStop.STOP) {
-			CommandUtils.leaveEditorMode();
-			sender.sendMessage(CommandUtils.findText(TEXT_EDITOR_STOP, sender));
+			CommandUtils.leaveEditorMode(sender);
 			return;
 		}
 		if (sender instanceof Player player) {
 			World world = player.getWorld();
-			CommandUtils.enterEditorMode(world);
-			sender.sendMessage(CommandUtils.findText(TEXT_EDITOR_START, sender));
+			CommandUtils.enterEditorMode(sender, world);
 		} else {
 			throw new OstereierException(Message.CMD_WORLD_NOT_DETECTED);
 		}
@@ -73,20 +67,13 @@ public class OstereierCommand implements CommandExecutor {
 		if (sender instanceof Player player) {
 			World world = player.getWorld();
 			if (gameMode == ParamStartStopAuto.START) {
-				CommandUtils.startGame(world);
+				CommandUtils.startGame(sender, world);
 			}
 			if (gameMode == ParamStartStopAuto.STOP) {
-				CommandUtils.stopGame(world);
+				CommandUtils.stopGame(sender, world);
 			}
 			if (gameMode == ParamStartStopAuto.AUTO) {
-				if (!CommandUtils.adjustGameToCalendar(world)) { // NOSONAR
-					return;
-				}
-			}
-			if (CommandUtils.isGameActive(world)) {
-				sender.sendMessage(String.format(CommandUtils.findText(TEXT_GAME_START, sender), world.getName()));
-			} else {
-				sender.sendMessage(String.format(CommandUtils.findText(TEXT_GAME_STOP, sender), world.getName()));
+				CommandUtils.adjustGameToCalendar(sender, world);
 			}
 		} else {
 			throw new OstereierException(Message.CMD_WORLD_NOT_DETECTED);

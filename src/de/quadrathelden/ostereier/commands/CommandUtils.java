@@ -310,7 +310,7 @@ public class CommandUtils {
 	//
 	// Other calculations
 	//
-	
+
 	public static Player getNearestPlayer(Location sourcelocation) {
 		Player targetPlayer = null;
 		double targetDistance = 0.0;
@@ -361,12 +361,12 @@ public class CommandUtils {
 		return getAPI().getEditorWorld();
 	}
 
-	protected static void enterEditorMode(World world) throws OstereierException {
-		getAPI().enterEditorMode(world);
+	protected static void enterEditorMode(CommandSender initiator, World world) throws OstereierException {
+		getAPI().enterEditorMode(initiator, world);
 	}
 
-	protected static void leaveEditorMode() throws OstereierException {
-		getAPI().leaveEditorMode();
+	protected static void leaveEditorMode(CommandSender initiator) throws OstereierException {
+		getAPI().leaveEditorMode(initiator);
 	}
 
 	protected static void setCurrentTemplate(ConfigTemplate template) {
@@ -385,28 +385,28 @@ public class CommandUtils {
 		return getAPI().getWorldsWithGame();
 	}
 
-	protected static void startGame(World world) throws OstereierException {
-		getAPI().startGame(world);
+	protected static void startGame(CommandSender initiator, World world) throws OstereierException {
+		getAPI().startGame(initiator, world);
 	}
 
-	protected static void stopGame(World world) {
-		getAPI().stopGame(world);
+	protected static void stopGame(CommandSender initiator, World world) {
+		getAPI().stopGame(initiator, world);
 	}
 
-	protected static boolean adjustGameToCalendar(World world) throws OstereierException {
-		return getAPI().adjustGameToCalendar(world);
+	protected static boolean adjustGameToCalendar(CommandSender initiator, World world) throws OstereierException {
+		return getAPI().adjustGameToCalendar(initiator, world);
 	}
 
-	public static void adjustGameToCalendarInAllWorlds() throws OstereierException {
-		getAPI().adjustGameToCalendarInAllWorlds();
+	public static void adjustGameToCalendarInAllWorlds(CommandSender initiator) throws OstereierException {
+		getAPI().adjustGameToCalendarInAllWorlds(initiator);
 	}
 
 	protected static void openShopGui(Player player) throws OstereierException {
 		getAPI().openShopGui(player);
 	}
 
-	protected static int sanityCheck(CommandSender initiator, World world) {
-		return getAPI().sanityCheck(initiator, world);
+	protected static int performSanityCheck(CommandSender initiator, World world) {
+		return getAPI().performSanityCheck(initiator, world);
 	}
 
 	protected static void reload(CommandSender sender) throws OstereierException {

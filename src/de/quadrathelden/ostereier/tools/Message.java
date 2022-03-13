@@ -75,6 +75,7 @@ public enum Message {
 	MODE_MULTIWORLD_EDITOR_WRONG(
 			"In multiworld mode you must place all eggs in one editor world. Please use that word for further editing"),
 	MODE_GAME_ALREADY_ACTIVE("The game is already started in this world"),
+	MODE_CITIZENS_INTEGRATION_FAILED("Could not find Citizens plugin"),
 
 	API_EDITOR_NOT_ACTIVE("The easteregg editor is not active"),
 

@@ -83,7 +83,7 @@ public class ChunkTicket {
 			removeMinecraftChunkTicket();
 		}
 	}
-	
+
 	public void removeAll() {
 		for (ChunkTicketOwner myOwner : new HashSet<>(owners)) {
 			removeOwner(myOwner);

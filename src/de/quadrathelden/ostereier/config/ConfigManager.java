@@ -27,6 +27,8 @@ import de.quadrathelden.ostereier.config.subsystem.ConfigCalendar;
 import de.quadrathelden.ostereier.config.subsystem.ConfigEconomy;
 import de.quadrathelden.ostereier.config.subsystem.ConfigEditor;
 import de.quadrathelden.ostereier.config.subsystem.ConfigGame;
+import de.quadrathelden.ostereier.config.subsystem.ConfigNpc;
+import de.quadrathelden.ostereier.config.subsystem.ConfigSanity;
 import de.quadrathelden.ostereier.config.subsystem.ConfigScoreboard;
 import de.quadrathelden.ostereier.exception.OstereierException;
 import de.quadrathelden.ostereier.text.TextManager;
@@ -44,25 +46,32 @@ public class ConfigManager {
 	public static final String SECTION_ECONOMY = "economy";
 	public static final String SECTION_SCOREBOARD = "scoreboard";
 	public static final String SECTION_CALENDAR = "calendar";
+	public static final String SECTION_SANITY = "sanity";
+	public static final String SECTION_NPC = "npc";
 	public static final String PARAM_STARTUP_PASSIVEMODE = "passiveMode";
 	public static final String PARAM_STARTUP_MULTIWORLD = "multiWorld";
 	public static final String PARAM_STARTUP_SAFEMODE = "safeMode";
+	public static final String PARAM_STARTUP_SANITYDELAY = "initialSanityCheckDelay";
 
 	public static final boolean DEFAULT_PASSIVEMODE = false;
 
 	private static boolean multiworld = false;
 	private static boolean safemode = true;
+	private static int initialSanityCheckDelay = 10;
 
 	protected final Plugin plugin;
 	protected final TextManager textManager;
 
-	protected ConfigDesign configDesign = new ConfigDesign();
 	protected ConfigEditor configEditor = new ConfigEditor();
 	protected ConfigBunny configBunny = new ConfigBunny();
 	protected ConfigGame configGame = new ConfigGame();
 	protected ConfigEconomy configEconomy = new ConfigEconomy();
 	protected ConfigScoreboard configScoreboard = new ConfigScoreboard();
 	protected ConfigCalendar configCalendar = new ConfigCalendar();
+	protected ConfigSanity configSanity = new ConfigSanity();
+	protected ConfigNpc configNpc = new ConfigNpc();
+
+	protected ConfigDesign configDesign = new ConfigDesign();
 	protected ConfigCurrency configCurrency = new ConfigCurrency();
 	protected InternalPlayerPersistentScoreCollection internalPlayerPersistentScoreCollection = null;
 	protected ConfigShopOfferCollection configShopOfferCollection = new ConfigShopOfferCollection();
@@ -99,10 +108,20 @@ public class ConfigManager {
 		ConfigManager.safemode = safemode;
 	}
 
+	public static int getInitialSanityCheckDelay() {
+		return initialSanityCheckDelay;
+	}
+
+	protected static void setInitialSanityCheckDelay(int initialSanityCheckDelay) {
+		ConfigManager.initialSanityCheckDelay = initialSanityCheckDelay;
+	}
+
 	protected void initializeStaticVariables() {
 		ConfigurationSection startupConfigurationSection = plugin.getConfig().getConfigurationSection(SECTION_STARTUP);
 		setMultiworld(startupConfigurationSection.getBoolean(PARAM_STARTUP_MULTIWORLD, multiworld));
 		setSafemode(startupConfigurationSection.getBoolean(PARAM_STARTUP_SAFEMODE, safemode));
+		setInitialSanityCheckDelay(
+				startupConfigurationSection.getInt(PARAM_STARTUP_SANITYDELAY, initialSanityCheckDelay));
 	}
 
 	//
@@ -175,6 +194,14 @@ public class ConfigManager {
 
 	public ConfigCalendar getConfigCalendar() {
 		return configCalendar;
+	}
+
+	public ConfigSanity getConfigSanity() {
+		return configSanity;
+	}
+
+	public ConfigNpc getConfigNpc() {
+		return configNpc;
 	}
 
 	//
@@ -250,33 +277,63 @@ public class ConfigManager {
 		configDesign = newConfigSection;
 	}
 
-	public void reloadConfig() throws OstereierException {
+	public void reloadConfig() throws OstereierException { // NOSONAR
 		plugin.reloadConfig();
 
 		if (plugin.getConfig().contains(SECTION_EDITOR, true)
 				&& plugin.getConfig().isConfigurationSection(SECTION_EDITOR)) {
 			configEditor = new ConfigEditor(plugin.getConfig().getConfigurationSection(SECTION_EDITOR), textManager);
+		} else {
+			configEditor = new ConfigEditor();
 		}
+
 		if (plugin.getConfig().contains(SECTION_BUNNY, true)
 				&& plugin.getConfig().isConfigurationSection(SECTION_BUNNY)) {
 			configBunny = new ConfigBunny(plugin.getConfig().getConfigurationSection(SECTION_BUNNY));
+		} else {
+			configBunny = new ConfigBunny();
 		}
+
 		if (plugin.getConfig().contains(SECTION_GAME, true)
 				&& plugin.getConfig().isConfigurationSection(SECTION_GAME)) {
 			configGame = new ConfigGame(plugin.getConfig().getConfigurationSection(SECTION_GAME));
+		} else {
+			configGame = new ConfigGame();
 		}
+
 		if (plugin.getConfig().contains(SECTION_ECONOMY, true)
 				&& plugin.getConfig().isConfigurationSection(SECTION_ECONOMY)) {
 			configEconomy = new ConfigEconomy(plugin.getConfig().getConfigurationSection(SECTION_ECONOMY));
+		} else {
+			configEconomy = new ConfigEconomy();
 		}
+
 		if (plugin.getConfig().contains(SECTION_SCOREBOARD, true)
 				&& plugin.getConfig().isConfigurationSection(SECTION_SCOREBOARD)) {
 			configScoreboard = new ConfigScoreboard(plugin.getConfig().getConfigurationSection(SECTION_SCOREBOARD),
 					textManager);
+		} else {
+			configScoreboard = new ConfigScoreboard();
 		}
+
 		if (plugin.getConfig().contains(SECTION_CALENDAR, true)
 				&& plugin.getConfig().isConfigurationSection(SECTION_CALENDAR)) {
 			configCalendar = new ConfigCalendar(plugin.getConfig().getConfigurationSection(SECTION_CALENDAR));
+		} else {
+			configCalendar = new ConfigCalendar();
+		}
+
+		if (plugin.getConfig().contains(SECTION_SANITY, true)
+				&& plugin.getConfig().isConfigurationSection(SECTION_SANITY)) {
+			configSanity = new ConfigSanity(plugin.getConfig().getConfigurationSection(SECTION_SANITY));
+		} else {
+			configSanity = new ConfigSanity();
+		}
+
+		if (plugin.getConfig().contains(SECTION_NPC, true) && plugin.getConfig().isConfigurationSection(SECTION_NPC)) {
+			configNpc = new ConfigNpc(plugin.getConfig().getConfigurationSection(SECTION_NPC));
+		} else {
+			configNpc = new ConfigNpc();
 		}
 
 		configCurrency = new ConfigCurrency(plugin);

@@ -40,50 +40,31 @@ public class AdminCommand implements CommandExecutor {
 	}
 
 	protected void cmdEditorStart(CommandSender sender, World world) throws OstereierException {
-		CommandUtils.enterEditorMode(world);
-		sender.sendMessage(CommandUtils.findText(OstereierCommand.TEXT_EDITOR_START, sender));
+		CommandUtils.enterEditorMode(sender, world);
 	}
 
 	protected void cmdEditorStop(CommandSender sender) throws OstereierException {
-		CommandUtils.leaveEditorMode();
-		sender.sendMessage(CommandUtils.findText(OstereierCommand.TEXT_EDITOR_STOP, sender));
+		CommandUtils.leaveEditorMode(sender);
 	}
 
 	protected void cmdGameStart(CommandSender sender, World world) throws OstereierException {
-		CommandUtils.startGame(world);
-		if (CommandUtils.isGameActive(world)) {
-			sender.sendMessage(
-					String.format(CommandUtils.findText(OstereierCommand.TEXT_GAME_START, sender), world.getName()));
-		}
+		CommandUtils.startGame(sender, world);
 	}
 
 	protected void cmdGameStop(CommandSender sender, World world) {
-		CommandUtils.stopGame(world);
-		if (!CommandUtils.isGameActive(world)) {
-			sender.sendMessage(
-					String.format(CommandUtils.findText(OstereierCommand.TEXT_GAME_STOP, sender), world.getName()));
-		}
+		CommandUtils.stopGame(sender, world);
 	}
 
 	protected void cmdGameAuto(CommandSender sender, World world) throws OstereierException {
-		if (!CommandUtils.adjustGameToCalendar(world)) {
-			return;
-		}
-		if (CommandUtils.isGameActive(world)) {
-			sender.sendMessage(
-					String.format(CommandUtils.findText(OstereierCommand.TEXT_GAME_START, sender), world.getName()));
-		} else {
-			sender.sendMessage(
-					String.format(CommandUtils.findText(OstereierCommand.TEXT_GAME_STOP, sender), world.getName()));
-		}
+		CommandUtils.adjustGameToCalendar(sender, world);
 	}
 
-	protected void cmdGameAutoAll() throws OstereierException {
-		CommandUtils.adjustGameToCalendarInAllWorlds();
+	protected void cmdGameAutoAll(CommandSender sender) throws OstereierException {
+		CommandUtils.adjustGameToCalendarInAllWorlds(sender);
 	}
 
 	protected void cmdCheckWorld(CommandSender sender, World world) {
-		int i = CommandUtils.sanityCheck(sender, world);
+		int i = CommandUtils.performSanityCheck(sender, world);
 		if (i == 0) {
 			sender.sendMessage(CommandUtils.findText(Message.OK.name(), sender));
 		}
@@ -152,7 +133,7 @@ public class AdminCommand implements CommandExecutor {
 			cmdGameAuto(sender, world);
 			break;
 		case GAMEAUTOALL:
-			cmdGameAutoAll();
+			cmdGameAutoAll(sender);
 			break;
 		case CHECKWORLD:
 			cmdCheckWorld(sender, world);

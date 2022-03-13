@@ -35,7 +35,7 @@ public class AdminTabCompleter implements TabCompleter {
 			return CommandUtils.enumWorlds();
 		}
 		if (paramType == ParamType.PLAYER) {
-			return null; //NOSONAR
+			return null; // NOSONAR
 		}
 		return new ArrayList<>();
 	}

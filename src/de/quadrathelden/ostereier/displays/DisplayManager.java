@@ -153,12 +153,12 @@ public class DisplayManager {
 			}
 		}
 	}
-	
+
 	public int repairEggs(World world) {
 		int count = 0;
 		List<Item> items = new ArrayList<>(world.getEntitiesByClass(Item.class));
 		for (Item myItem : items) {
-			UUID myUUID = readDisplaySeal(myItem.getItemStack()); 
+			UUID myUUID = readDisplaySeal(myItem.getItemStack());
 			if (myUUID != null && (findDisplayEgg(myUUID) == null)) {
 				myItem.remove();
 				count = count +1;

@@ -11,6 +11,7 @@ import de.quadrathelden.ostereier.editor.EditorManager;
 import de.quadrathelden.ostereier.events.EventManager;
 import de.quadrathelden.ostereier.exception.OstereierException;
 import de.quadrathelden.ostereier.game.GameManager;
+import de.quadrathelden.ostereier.integrations.IntegrationManager;
 import de.quadrathelden.ostereier.mode.ModeManager;
 import de.quadrathelden.ostereier.permissions.PermissionManager;
 import de.quadrathelden.ostereier.scoreboard.ScoreboardManager;
@@ -28,6 +29,7 @@ public class OstereierOrchestrator {
 	private final PermissionManager permissionManager;
 	private final EventManager eventManager;
 	private final ChunkTicketManager chunkTicketManager;
+	private final IntegrationManager integrationManager;
 	private final EconomyManager economyManager;
 	private final ScoreboardManager scoreboardManager;
 	private final DisplayManager displayManager;
@@ -49,6 +51,7 @@ public class OstereierOrchestrator {
 		permissionManager = createPermissionManager();
 		eventManager = createEventManager();
 		chunkTicketManager = createChunkTicketManager();
+		integrationManager = createIntegrationManager();
 		economyManager = createEconomyManager();
 		scoreboardManager = createScoreboardManager();
 		displayManager = createDisplayManager();
@@ -79,9 +82,13 @@ public class OstereierOrchestrator {
 	public EventManager getEventManager() {
 		return eventManager;
 	}
-	
+
 	public ChunkTicketManager getChunkTicketManager() {
 		return chunkTicketManager;
+	}
+
+	public IntegrationManager getIntegrationManager() {
+		return integrationManager;
 	}
 
 	public EconomyManager getEconomyManager() {
@@ -128,9 +135,13 @@ public class OstereierOrchestrator {
 	protected EventManager createEventManager() {
 		return new EventManager(this);
 	}
-	
+
 	protected ChunkTicketManager createChunkTicketManager() {
 		return new ChunkTicketManager(this);
+	}
+
+	protected IntegrationManager createIntegrationManager() {
+		return new IntegrationManager(this);
 	}
 
 	protected EconomyManager createEconomyManager() {
