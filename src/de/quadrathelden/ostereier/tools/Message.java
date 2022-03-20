@@ -43,6 +43,10 @@ public enum Message {
 	CONFIG_SHOP_FILE_MISSING("Cannot find offer config file"),
 	CONFIG_MESSAGE_FILE_MISSING("Cannot find message file"),
 	CONFIG_CALENDAR_DATEFORMAT_WRONG("Can't parse DateTime for calendar"),
+	CONFIG_STATISTIC_OUTPUT_PROVIDER_MISSING("StatisticOutputProvider is missing"),
+	CONFIG_STATISTIC_OUTPUT_PROVIDER_UNKNOWN("Unknown StatisticOutputProvider"),
+	CONFIG_STATISTIC_ILLEGAL_DATE_TIME_FORMAT("Illegal DateTime format"),
+	CONFIG_STATISTIC_ILLEGAL_INTERVAL_SIZE("Illegal interval size"),
 
 	ECONOMY_TNE_NOT_AVAIL("Error connecting to TNE"),
 	ECONOMY_TNE_CURRENCY_MISSING("TNE Currency not found"),

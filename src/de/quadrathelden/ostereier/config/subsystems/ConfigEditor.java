@@ -1,4 +1,4 @@
-package de.quadrathelden.ostereier.config.subsystem;
+package de.quadrathelden.ostereier.config.subsystems;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;

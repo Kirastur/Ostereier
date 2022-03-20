@@ -5,8 +5,8 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 
 import de.quadrathelden.ostereier.config.ConfigManager;
-import de.quadrathelden.ostereier.config.subsystem.ConfigEconomy;
-import de.quadrathelden.ostereier.config.subsystem.ConfigScoreboard;
+import de.quadrathelden.ostereier.config.subsystems.ConfigEconomy;
+import de.quadrathelden.ostereier.config.subsystems.ConfigScoreboard;
 import de.quadrathelden.ostereier.economy.EconomyManager;
 import de.quadrathelden.ostereier.economy.EconomyProvider;
 import de.quadrathelden.ostereier.events.EventManager;

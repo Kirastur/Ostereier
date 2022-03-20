@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 import de.quadrathelden.ostereier.bunny.Bunny;
 import de.quadrathelden.ostereier.config.design.ConfigEgg;
-import de.quadrathelden.ostereier.config.subsystem.ConfigGame;
+import de.quadrathelden.ostereier.config.subsystems.ConfigGame;
 import de.quadrathelden.ostereier.exception.OstereierException;
 import de.quadrathelden.ostereier.tools.Coordinate;
 
@@ -97,8 +97,8 @@ public abstract class GameEggSimple implements GameEgg {
 		gameHelper.sendEggCancelEvent(configEgg);
 	}
 
-	protected void rewardPlayer(Player player) throws OstereierException {
-		gameHelper.rewardPlayer(this, player);
+	protected void scorePlayerEggCollect(Player player) throws OstereierException {
+		gameHelper.scorePlayerEggCollect(player, this);
 	}
 
 }

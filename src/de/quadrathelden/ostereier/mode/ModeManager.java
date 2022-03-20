@@ -17,7 +17,7 @@ import de.quadrathelden.ostereier.chunktickets.ChunkTicketManager;
 import de.quadrathelden.ostereier.config.ConfigManager;
 import de.quadrathelden.ostereier.config.design.ConfigDesign;
 import de.quadrathelden.ostereier.config.design.ConfigTemplate;
-import de.quadrathelden.ostereier.config.subsystem.ConfigCalendar;
+import de.quadrathelden.ostereier.config.subsystems.ConfigCalendar;
 import de.quadrathelden.ostereier.displays.DisplayManager;
 import de.quadrathelden.ostereier.economy.EconomyManager;
 import de.quadrathelden.ostereier.editor.EditorManager;
@@ -29,6 +29,8 @@ import de.quadrathelden.ostereier.integrations.IntegrationManager;
 import de.quadrathelden.ostereier.permissions.PermissionManager;
 import de.quadrathelden.ostereier.scoreboard.ScoreboardManager;
 import de.quadrathelden.ostereier.shop.ShopManager;
+import de.quadrathelden.ostereier.statistics.GameDetailEntry;
+import de.quadrathelden.ostereier.statistics.StatisticManager;
 import de.quadrathelden.ostereier.text.TextManager;
 import de.quadrathelden.ostereier.tools.Message;
 
@@ -52,10 +54,11 @@ public class ModeManager {
 	protected final ChunkTicketManager chunkTicketManager;
 	protected final IntegrationManager integrationManager;
 	protected final EconomyManager economyManager;
+	protected final StatisticManager statisticManager;
+	protected final ScoreboardManager scoreboardManager;
 	protected final DisplayManager displayManager;
 	protected final EditorManager editorManager;
 	protected final GameManager gameManager;
-	protected final ScoreboardManager scoreboardManager;
 	protected final ShopManager shopManager;
 
 	protected ModeScheduler modeScheduler = null;
@@ -75,13 +78,14 @@ public class ModeManager {
 		this.chunkTicketManager = orchestrator.getChunkTicketManager();
 		this.integrationManager = orchestrator.getIntegrationManager();
 		this.economyManager = orchestrator.getEconomyManager();
+		this.statisticManager = orchestrator.getStatisticManager();
+		this.scoreboardManager = orchestrator.getScoreboardManager();
 		this.displayManager = orchestrator.getDisplayManager();
 		this.editorManager = orchestrator.getEditorManager();
 		this.gameManager = orchestrator.getGameManager();
-		this.scoreboardManager = orchestrator.getScoreboardManager();
 		this.shopManager = orchestrator.getShopManager();
 		modeScheduler = new ModeScheduler(plugin, this);
-		modeListener = new ModeListener(plugin);
+		modeListener = new ModeListener(plugin, this);
 		modeListener.enableListener();
 		if (ConfigManager.getInitialSanityCheckDelay() > 0) {
 			sanityCountdown = ConfigManager.getInitialSanityCheckDelay();
@@ -267,12 +271,25 @@ public class ModeManager {
 	public void startGame(CommandSender initiator, World world) throws OstereierException {
 		validateGamePrerequisits(world);
 		gameManager.startGame(world);
+		statisticManager.addGameDetailEntry(new GameDetailEntry(LocalDateTime.now(), world, true));
 		printInfoStringParam(initiator, TEXT_GAME_START, world.getName());
 	}
 
-	public void stopGame(CommandSender initiator, World world) {
+	public boolean stopGame(CommandSender initiator, World world) throws OstereierException {
+		if (gameManager.findGameWorld(world) == null) {
+			return false;
+		}
 		gameManager.stopGame(world);
+		statisticManager.addGameDetailEntry(new GameDetailEntry(LocalDateTime.now(), world, false));
+		statisticManager.summarizeWorld(world, isDisabled());
 		printInfoStringParam(initiator, TEXT_GAME_STOP, world.getName());
+		return true;
+	}
+
+	public void stopAllGames(CommandSender initiator) throws OstereierException {
+		for (World myWorld : gameManager.getWorldsWithGame()) {
+			stopGame(initiator, myWorld);
+		}
 	}
 
 	//
@@ -412,6 +429,7 @@ public class ModeManager {
 			configManager.reloadMessages();
 			configManager.reloadConfig();
 			economyManager.updateProvider();
+			statisticManager.updateProvider();
 			restartCitizensIntegration();
 			String defaultRewardCurrency = configManager.getConfigEconomy().getDefaultRewardCurrencyName();
 			ConfigDesign newDesign = configManager.buildConfigDesignFromLocalConfigFile(plugin, defaultRewardCurrency);
@@ -441,6 +459,7 @@ public class ModeManager {
 				gameManager.handleScheduler();
 			}
 			scoreboardManager.handleScheduler();
+			statisticManager.handleScheduler();
 			adjustGameToCalendarScheduler();
 			handleSanityScheduler();
 		} catch (OstereierException oe) {
@@ -461,23 +480,32 @@ public class ModeManager {
 	}
 
 	public void disable() {
-		setDisable();
-		modeScheduler.cancel();
-		modeScheduler = null;
-		modeListener.disableListener();
-		modeListener = null;
+		try {
+			setDisable();
+			modeScheduler.cancel();
+			modeScheduler = null;
+			modeListener.disableListener();
+			modeListener = null;
 
-		shopManager.disable();
-		gameManager.stopAllGames();
-		gameManager.disable();
-		if (editorManager.isEditorActive()) {
-			editorManager.leaveEditorMode();
+			shopManager.disable();
+			stopAllGames(null);
+			gameManager.disable();
+			if (editorManager.isEditorActive()) {
+				editorManager.leaveEditorMode();
+			}
+			editorManager.disable();
+			displayManager.disable();
+			scoreboardManager.disable();
+			statisticManager.disable();
+			economyManager.disable();
+			chunkTicketManager.disable();
+		} catch (OstereierException oe) {
+			printInfoNoParam(null, oe.getMessage());
+			oe.printStackTrace();
+		} catch (Exception e) {
+			printInfoNoParam(null, Message.JAVA_EXCEPTION.toString());
+			e.printStackTrace();
 		}
-		editorManager.disable();
-		displayManager.disable();
-		scoreboardManager.disable();
-		economyManager.disable();
-		chunkTicketManager.disable();
 	}
 
 }

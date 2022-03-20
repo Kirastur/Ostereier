@@ -2,6 +2,7 @@ package de.quadrathelden.ostereier.game.world;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -20,17 +21,21 @@ import de.quadrathelden.ostereier.config.design.ConfigEgg;
 import de.quadrathelden.ostereier.config.design.ConfigSpawnpoint;
 import de.quadrathelden.ostereier.displays.DisplayManager;
 import de.quadrathelden.ostereier.economy.EconomyManager;
+import de.quadrathelden.ostereier.economy.EconomyProvider;
 import de.quadrathelden.ostereier.exception.OstereierException;
 import de.quadrathelden.ostereier.game.GameManager;
 import de.quadrathelden.ostereier.game.egg.GameEgg;
 import de.quadrathelden.ostereier.game.egg.GameHelper;
 import de.quadrathelden.ostereier.scoreboard.ScoreboardManager;
+import de.quadrathelden.ostereier.statistics.CollectDetailEntry;
+import de.quadrathelden.ostereier.statistics.StatisticManager;
 import de.quadrathelden.ostereier.tools.Coordinate;
 
 public class GameWorld {
 
 	protected final ConfigManager configManager;
 	protected final EconomyManager economyManager;
+	protected final StatisticManager statisticManager;
 	protected final ScoreboardManager scoreboardManager;
 	protected final GameManager gameManager;
 
@@ -41,10 +46,11 @@ public class GameWorld {
 	protected List<PlayerScore> playerScores = new ArrayList<>();
 
 	public GameWorld(World world, ConfigManager configManager, EconomyManager economyManager,
-			ScoreboardManager scoreboardManager, GameManager gameManager) {
+			StatisticManager statisticManager, ScoreboardManager scoreboardManager, GameManager gameManager) {
 		this.world = world;
 		this.configManager = configManager;
 		this.economyManager = economyManager;
+		this.statisticManager = statisticManager;
 		this.scoreboardManager = scoreboardManager;
 		this.gameManager = gameManager;
 		this.bunny = buildBunny();
@@ -227,13 +233,33 @@ public class GameWorld {
 		return null;
 	}
 
-	public void addPlayerScore(Player player, GameEgg gameEgg) throws OstereierException {
+	public void scorePlayerEggCollect(Player player, GameEgg gameEgg) throws OstereierException {
+
+		ConfigEgg configEgg = gameEgg.getConfigEgg();
+		String rewardCurrency = economyManager.refineRewardCurrencyName(configEgg.getRewardCurrency());
+
+		// Step 1: Realtime PlayerScore
 		PlayerScore playerScore = findPlayerScore(player);
 		if (playerScore == null) {
 			playerScore = new PlayerScore(player, economyManager);
 			playerScores.add(playerScore);
 		}
 		playerScore.rewardPlayer(gameEgg);
+
+		// Step 2: Persistent Economy Provider
+		EconomyProvider economyProvider = economyManager.getEconomyProvider();
+		economyProvider.incrementEggs(player);
+		if (configEgg.getRewardAmount() > 0) {
+			economyProvider.addPoints(player, configEgg.getRewardAmount(), rewardCurrency);
+		}
+		economyProvider.commit();
+
+		// Step 3: Statistics
+		CollectDetailEntry cde = new CollectDetailEntry(LocalDateTime.now(), getWorld(), gameEgg.getCoordinate(),
+				configEgg, configEgg.getRewardAmount(), rewardCurrency, player);
+		statisticManager.addCollectDetailEntry(cde);
+
+		// Step 4: Player Scoreboard
 		scoreboardManager.updateScoreboard(player);
 	}
 

@@ -5,8 +5,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import de.quadrathelden.ostereier.bunny.Bunny;
-import de.quadrathelden.ostereier.config.subsystem.ConfigBunny;
-import de.quadrathelden.ostereier.config.subsystem.ConfigGame;
+import de.quadrathelden.ostereier.config.subsystems.ConfigBunny;
+import de.quadrathelden.ostereier.config.subsystems.ConfigGame;
 
 public class OstereierGameStartEvent extends Event {
 

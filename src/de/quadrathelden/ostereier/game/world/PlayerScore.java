@@ -1,13 +1,13 @@
 package de.quadrathelden.ostereier.game.world;
 
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.OfflinePlayer;
 
 import de.quadrathelden.ostereier.config.design.ConfigEgg;
 import de.quadrathelden.ostereier.economy.EconomyManager;
-import de.quadrathelden.ostereier.economy.EconomyProvider;
-import de.quadrathelden.ostereier.exception.OstereierException;
 import de.quadrathelden.ostereier.game.egg.GameEgg;
 
 public class PlayerScore {
@@ -15,7 +15,7 @@ public class PlayerScore {
 	protected final OfflinePlayer offlinePlayer;
 	protected final EconomyManager economyManager;
 	protected int eggsCollected = 0;
-	protected int pointsCollected = 0;
+	protected Map<String, Integer> pointsCollected = new HashMap<>();
 	protected Instant lastChange = Instant.now();
 
 	public PlayerScore(OfflinePlayer offlinePlayer, EconomyManager economyManager) {
@@ -31,7 +31,7 @@ public class PlayerScore {
 		return eggsCollected;
 	}
 
-	public int getPointsCollected() {
+	public Map<String, Integer> getPointsCollected() {
 		return pointsCollected;
 	}
 
@@ -39,17 +39,19 @@ public class PlayerScore {
 		return lastChange;
 	}
 
-	void rewardPlayer(GameEgg gameEgg) throws OstereierException {
+	void rewardPlayer(GameEgg gameEgg) {
 		lastChange = Instant.now();
-		ConfigEgg configEgg = gameEgg.getConfigEgg();
-		pointsCollected = pointsCollected + configEgg.getRewardAmount();
 		eggsCollected = eggsCollected + 1;
-		EconomyProvider economyProvider = economyManager.getEconomyProvider();
-		economyProvider.incrementEggs(offlinePlayer);
-		String rewardCurrency = configEgg.getRewardCurrency();
-		rewardCurrency = economyManager.refineRewardCurrencyName(rewardCurrency);
-		economyProvider.addPoints(offlinePlayer, configEgg.getRewardAmount(), rewardCurrency);
-		economyProvider.commit();
+		ConfigEgg configEgg = gameEgg.getConfigEgg();
+		if (configEgg.getRewardAmount() > 0) {
+			String currency = economyManager.refineRewardCurrencyName(configEgg.getRewardCurrency());
+			Integer myPoints = pointsCollected.get(currency);
+			if (myPoints == null) {
+				myPoints = 0;
+			}
+			myPoints = myPoints + configEgg.getRewardAmount();
+			pointsCollected.put(currency, myPoints);
+		}
 	}
 
 }

@@ -16,6 +16,7 @@ import de.quadrathelden.ostereier.mode.ModeManager;
 import de.quadrathelden.ostereier.permissions.PermissionManager;
 import de.quadrathelden.ostereier.scoreboard.ScoreboardManager;
 import de.quadrathelden.ostereier.shop.ShopManager;
+import de.quadrathelden.ostereier.statistics.StatisticManager;
 import de.quadrathelden.ostereier.text.TextManager;
 import de.quadrathelden.ostereier.tools.Message;
 
@@ -31,6 +32,7 @@ public class OstereierOrchestrator {
 	private final ChunkTicketManager chunkTicketManager;
 	private final IntegrationManager integrationManager;
 	private final EconomyManager economyManager;
+	private final StatisticManager statisticManager;
 	private final ScoreboardManager scoreboardManager;
 	private final DisplayManager displayManager;
 	private final EditorManager editorManager;
@@ -53,6 +55,7 @@ public class OstereierOrchestrator {
 		chunkTicketManager = createChunkTicketManager();
 		integrationManager = createIntegrationManager();
 		economyManager = createEconomyManager();
+		statisticManager = createStatisticManager();
 		scoreboardManager = createScoreboardManager();
 		displayManager = createDisplayManager();
 		editorManager = createEditorManager();
@@ -93,6 +96,10 @@ public class OstereierOrchestrator {
 
 	public EconomyManager getEconomyManager() {
 		return economyManager;
+	}
+
+	public StatisticManager getStatisticManager() {
+		return statisticManager;
 	}
 
 	public ScoreboardManager getScoreboardManager() {
@@ -146,6 +153,10 @@ public class OstereierOrchestrator {
 
 	protected EconomyManager createEconomyManager() {
 		return new EconomyManager(this);
+	}
+
+	protected StatisticManager createStatisticManager() {
+		return new StatisticManager(this);
 	}
 
 	protected ScoreboardManager createScoreboardManager() {

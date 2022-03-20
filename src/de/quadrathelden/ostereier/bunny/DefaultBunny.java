@@ -5,7 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.bukkit.World;
 
 import de.quadrathelden.ostereier.config.design.ConfigEgg;
-import de.quadrathelden.ostereier.config.subsystem.ConfigBunny;
+import de.quadrathelden.ostereier.config.subsystems.ConfigBunny;
 import de.quadrathelden.ostereier.tools.Coordinate;
 
 public class DefaultBunny implements Bunny {

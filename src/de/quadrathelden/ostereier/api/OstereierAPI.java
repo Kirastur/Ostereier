@@ -283,8 +283,8 @@ public class OstereierAPI {
 		modeManager.startGame(initiator, world);
 	}
 
-	public void stopGame(CommandSender initiator, World world) {
-		modeManager.stopGame(initiator, world);
+	public boolean stopGame(CommandSender initiator, World world) throws OstereierException {
+		return modeManager.stopGame(initiator, world);
 	}
 
 	// ModeManager Calendar

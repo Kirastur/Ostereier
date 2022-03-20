@@ -4,7 +4,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import de.quadrathelden.ostereier.config.subsystem.ConfigEconomy;
+import de.quadrathelden.ostereier.config.subsystems.ConfigEconomy;
 import de.quadrathelden.ostereier.economy.EconomyProvider;
 import de.quadrathelden.ostereier.exception.OstereierException;
 

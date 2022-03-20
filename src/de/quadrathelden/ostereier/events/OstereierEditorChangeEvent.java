@@ -5,7 +5,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import de.quadrathelden.ostereier.config.design.ConfigTemplate;
-import de.quadrathelden.ostereier.config.subsystem.ConfigEditor;
+import de.quadrathelden.ostereier.config.subsystems.ConfigEditor;
 
 public class OstereierEditorChangeEvent extends Event {
 

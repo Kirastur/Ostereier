@@ -13,7 +13,7 @@ import de.quadrathelden.ostereier.config.ConfigManager;
 import de.quadrathelden.ostereier.config.design.ConfigEgg;
 import de.quadrathelden.ostereier.config.design.ConfigSpawnpoint;
 import de.quadrathelden.ostereier.config.design.ConfigTemplate;
-import de.quadrathelden.ostereier.config.subsystem.ConfigEditor;
+import de.quadrathelden.ostereier.config.subsystems.ConfigEditor;
 import de.quadrathelden.ostereier.displays.DisplayManager;
 import de.quadrathelden.ostereier.events.EditorChangeResult;
 import de.quadrathelden.ostereier.events.EventManager;

@@ -28,7 +28,7 @@ public class GameEggDefault extends GameEggSimple {
 		undrawEgg();
 		remainingCollectedTime = calculateRespawnDelay();
 		playPickupSound();
-		rewardPlayer(player);
+		scorePlayerEggCollect(player);
 		return true;
 	}
 

@@ -29,6 +29,7 @@ import de.quadrathelden.ostereier.game.world.GameWorld;
 import de.quadrathelden.ostereier.game.world.PlayerScore;
 import de.quadrathelden.ostereier.permissions.PermissionManager;
 import de.quadrathelden.ostereier.scoreboard.ScoreboardManager;
+import de.quadrathelden.ostereier.statistics.StatisticManager;
 import de.quadrathelden.ostereier.text.TextManager;
 import de.quadrathelden.ostereier.tools.Coordinate;
 
@@ -41,6 +42,7 @@ public class GameManager {
 	protected final EventManager eventManager;
 	protected final ChunkTicketManager chunkTicketManager;
 	protected final EconomyManager economyManager;
+	protected final StatisticManager statisticManager;
 	protected final ScoreboardManager scoreboardManager;
 	protected final DisplayManager displayManager;
 
@@ -55,6 +57,7 @@ public class GameManager {
 		this.eventManager = orchestrator.getEventManager();
 		this.chunkTicketManager = orchestrator.getChunkTicketManager();
 		this.economyManager = orchestrator.getEconomyManager();
+		this.statisticManager = orchestrator.getStatisticManager();
 		this.scoreboardManager = orchestrator.getScoreboardManager();
 		this.displayManager = orchestrator.getDisplayManager();
 		this.gameListener = new GameListener(plugin, textManager, configManager, permissionManager, this);
@@ -115,7 +118,8 @@ public class GameManager {
 	}
 
 	public void startGame(World world) {
-		GameWorld newGameWorld = new GameWorld(world, configManager, economyManager, scoreboardManager, this);
+		GameWorld newGameWorld = new GameWorld(world, configManager, economyManager, statisticManager,
+				scoreboardManager, this);
 		gameWorlds.add(newGameWorld);
 		gameListener.updateListener();
 	}
@@ -128,17 +132,13 @@ public class GameManager {
 		chunkTicketManager.removeAllFromWorld(oldGameWorld.getWorld());
 	}
 
-	public void stopGame(World world) {
+	public boolean stopGame(World world) {
 		GameWorld oldGameWorld = findGameWorld(world);
-		if (oldGameWorld != null) {
-			stopGame(oldGameWorld);
+		if (oldGameWorld == null) {
+			return false;
 		}
-	}
-
-	public void stopAllGames() {
-		for (GameWorld myGameWorld : new ArrayList<>(gameWorlds)) {
-			stopGame(myGameWorld);
-		}
+		stopGame(oldGameWorld);
+		return true;
 	}
 
 	public boolean playerClickToCollect(Player player, Location clickLocation, BlockFace blockFace)

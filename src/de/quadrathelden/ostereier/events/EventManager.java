@@ -1,6 +1,9 @@
 package de.quadrathelden.ostereier.events;
 
+import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -21,6 +24,8 @@ import de.quadrathelden.ostereier.economy.EconomyProvider;
 import de.quadrathelden.ostereier.exception.OstereierException;
 import de.quadrathelden.ostereier.game.egg.GameEgg;
 import de.quadrathelden.ostereier.game.world.PlayerScore;
+import de.quadrathelden.ostereier.statistics.AggregatedEntry;
+import de.quadrathelden.ostereier.statistics.CollectDetailEntry;
 import de.quadrathelden.ostereier.tools.Coordinate;
 
 public class EventManager {
@@ -122,4 +127,12 @@ public class EventManager {
 		plugin.getServer().getPluginManager().callEvent(event);
 		return event.getOffer();
 	}
+
+	public void sendStatisticEvent(boolean isAsync, LocalDateTime intervalStart, Collection<CollectDetailEntry> collectDetails,
+			Map<World, Integer> worldSegmentSizes, Collection<AggregatedEntry> aggregateds) {
+		OstereierStatisticEvent event = new OstereierStatisticEvent(isAsync, intervalStart, collectDetails, worldSegmentSizes,
+				aggregateds);
+		plugin.getServer().getPluginManager().callEvent(event);
+	}
+
 }

@@ -1,4 +1,4 @@
-package de.quadrathelden.ostereier.config.subsystem;
+package de.quadrathelden.ostereier.config.subsystems;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,10 +18,10 @@ public class ConfigCalendar {
 	// the calendar is empty by default.
 	// You must set an calendar entry in config.yml to use this feature.
 
-	public static final String ENABLE_CALENDAR_NAME = "enableCalendar";
-	public static final String EVENT_START_NAME = "eventStart";
-	public static final String EVENT_STOP_NAME = "eventEnd";
-	public static final String WORLDS_NAME = "worlds";
+	public static final String PARAM_ENABLE_CALENDAR = "enableCalendar";
+	public static final String PARAM_EVENT_START = "eventStart";
+	public static final String PARAM_EVENT_STOP = "eventEnd";
+	public static final String PARAM_WORLDS = "worlds";
 
 	public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm";
 
@@ -42,13 +42,13 @@ public class ConfigCalendar {
 	}
 
 	public ConfigCalendar(ConfigurationSection configurationSection) throws OstereierException {
-		this.enableCalendar = configurationSection.getBoolean(ENABLE_CALENDAR_NAME, enableCalendar);
+		this.enableCalendar = configurationSection.getBoolean(PARAM_ENABLE_CALENDAR, enableCalendar);
 		if (!this.enableCalendar) {
 			return;
 		}
-		this.worldNames.addAll(configurationSection.getStringList(WORLDS_NAME));
-		String eventStartInput = configurationSection.getString(EVENT_START_NAME);
-		String eventStopInput = configurationSection.getString(EVENT_STOP_NAME);
+		this.worldNames.addAll(configurationSection.getStringList(PARAM_WORLDS));
+		String eventStartInput = configurationSection.getString(PARAM_EVENT_START);
+		String eventStopInput = configurationSection.getString(PARAM_EVENT_STOP);
 		try {
 			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
 			eventStart = LocalDateTime.from(dateTimeFormatter.parse(eventStartInput));

@@ -247,6 +247,43 @@ scoreboard:
    # The title and names for the scoreboard are defined in messages.yml
 
 
+# Large statistic pack for big servers
+statistic:
+
+   # The statistic pack records every single egg pickup and summarizes them
+   # to interval based data. You can use the aggregated data to generate various
+   # reports, e.g. how many players have collected eggs the interval and
+   # how many eggs they have collected.
+
+   # EnableStatistic
+   #
+   # - Enable or disable the whole feature
+   enableStatistic: false
+   
+   # IntervalSize
+   #
+   # - Size of an interval in minutes. An hour (60 min) must be able to be 
+   # - broken down into intervals without a remainder.
+   # - So valid values are: 1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60
+   intervalSize: 5 
+   
+   # StaticticOutputProvider
+   #
+   # - Select the method for storing the aggregated data.
+   # - Possible provider are:
+   # -   * NONE (Data are only sent via OstereierStatisticEvent)
+   # -   * CONSOLE (Data are written to server console)
+   # -   * FILE (Date are written to CSV files into the pligin directory)
+   # -   * DATABASE (not yet implemented)
+   statisticOutputProvider: FILE
+   
+   # FormatDateTime
+   #
+   # Format of the printed DateTime values (only CONSOLE and FILE)
+   # See Java "DateTimeFormatter" for more info about the syntax here
+   formatDateTime: "yyyy-MM-dd HH:mm:ss"
+
+
 # Calendar
 calendar:
 

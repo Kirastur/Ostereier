@@ -1,4 +1,4 @@
-package de.quadrathelden.ostereier.config.subsystem;
+package de.quadrathelden.ostereier.config.subsystems;
 
 public enum ConfigEconomyProvider {
 

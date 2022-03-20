@@ -389,7 +389,7 @@ public class CommandUtils {
 		getAPI().startGame(initiator, world);
 	}
 
-	protected static void stopGame(CommandSender initiator, World world) {
+	protected static void stopGame(CommandSender initiator, World world) throws OstereierException {
 		getAPI().stopGame(initiator, world);
 	}
 

@@ -8,7 +8,7 @@ import org.bukkit.OfflinePlayer;
 
 import de.quadrathelden.ostereier.config.ConfigManager;
 import de.quadrathelden.ostereier.config.design.ConfigEgg;
-import de.quadrathelden.ostereier.config.subsystem.ConfigEconomy;
+import de.quadrathelden.ostereier.config.subsystems.ConfigEconomy;
 import de.quadrathelden.ostereier.exception.OstereierException;
 import de.quadrathelden.ostereier.integrations.IntegrationManager;
 import de.quadrathelden.ostereier.integrations.TNEIntegration;

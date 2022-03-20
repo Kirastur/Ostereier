@@ -60,7 +60,7 @@ commandHelp_de: "Mögliche Aktionen sind: %s"
 # Exceptions
 OK: "OK"
 ERROR: "ERROR"
-JAVA_EXCEPTION: "Java Exception Error"
+JAVA_EXCEPTION: "Ostereier Java Exception Error"
 
 ORCHESTRATOR_ALREADY_RUNNING: "Can't start orchestrator, another instance is already running"
 
@@ -99,6 +99,10 @@ CONFIG_SHOP_AMOUNT_TOO_BIG: "This material cannot carry the given Amount as Item
 CONFIG_SHOP_FILE_MISSING: "Cannot find offer config file"
 CONFIG_MESSAGE_FILE_MISSING: "Cannot find message file"
 CONFIG_CALENDAR_DATEFORMAT_WRONG: "Can't parse DateTime for calendar"
+CONFIG_STATISTIC_OUTPUT_PROVIDER_MISSING: "StatisticOutputProvider is missing"
+CONFIG_STATISTIC_OUTPUT_PROVIDER_UNKNOWN: "Unknown StatisticOutputProvider"
+CONFIG_STATISTIC_ILLEGAL_DATE_TIME_FORMAT: "Illegal DateTime format"
+CONFIG_STATISTIC_ILLEGAL_INTERVAL_SIZE: "Illegal interval size"
 
 ECONOMY_TNE_NOT_AVAIL: "Error connecting to TNE"
 ECONOMY_TNE_CURRENCY_MISSING: "TNE Currency not found"
@@ -188,6 +192,10 @@ CONFIG_SHOP_AMOUNT_TOO_BIG_de: "Das Material kann nicht auf die angegebene Verka
 CONFIG_SHOP_FILE_MISSING_de: "Die Datei für die Shop-Definition konnte nicht gefunden werden"
 CONFIG_MESSAGE_FILE_MISSING_de: "Die Datei für die Textausgaben konnte nicht gefunden werden"
 CONFIG_CALENDAR_DATEFORMAT_WRONG_de: "Das angehebene Datum hat ein ungültiges Format"
+CONFIG_STATISTIC_OUTPUT_PROVIDER_MISSING_de: "Der StatisticOutputProvider wurde nicht angegeben"
+CONFIG_STATISTIC_OUTPUT_PROVIDER_UNKNOWN_de: "Unbekannter StatisticOutputProvider"
+CONFIG_STATISTIC_ILLEGAL_DATE_TIME_FORMAT_de: "Ungültiges Illegal DateTime Format"
+CONFIG_STATISTIC_ILLEGAL_INTERVAL_SIZE_de: "Ungültige Intervall-Größe"
 
 ECONOMY_TNE_NOT_AVAIL_de: "Fehler beim Aufbau einer Verbindung zu TNE"
 ECONOMY_TNE_CURRENCY_MISSING_de: "Die angegebenr Währung ist in TNE nicht vorhanden"

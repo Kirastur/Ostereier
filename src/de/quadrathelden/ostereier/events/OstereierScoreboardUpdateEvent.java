@@ -6,7 +6,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.scoreboard.Objective;
 
-import de.quadrathelden.ostereier.config.subsystem.ConfigScoreboard;
+import de.quadrathelden.ostereier.config.subsystems.ConfigScoreboard;
 
 public class OstereierScoreboardUpdateEvent extends Event implements Cancellable {
 

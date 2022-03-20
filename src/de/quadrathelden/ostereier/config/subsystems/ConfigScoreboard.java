@@ -1,4 +1,4 @@
-package de.quadrathelden.ostereier.config.subsystem;
+package de.quadrathelden.ostereier.config.subsystems;
 
 import java.util.ArrayList;
 import java.util.List;

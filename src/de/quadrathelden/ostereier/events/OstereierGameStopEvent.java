@@ -6,7 +6,7 @@ import org.bukkit.World;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import de.quadrathelden.ostereier.config.subsystem.ConfigGame;
+import de.quadrathelden.ostereier.config.subsystems.ConfigGame;
 import de.quadrathelden.ostereier.game.world.PlayerScore;
 
 public class OstereierGameStopEvent extends Event {

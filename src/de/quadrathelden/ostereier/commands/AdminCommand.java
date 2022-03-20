@@ -51,7 +51,7 @@ public class AdminCommand implements CommandExecutor {
 		CommandUtils.startGame(sender, world);
 	}
 
-	protected void cmdGameStop(CommandSender sender, World world) {
+	protected void cmdGameStop(CommandSender sender, World world) throws OstereierException {
 		CommandUtils.stopGame(sender, world);
 	}
 

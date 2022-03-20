@@ -7,7 +7,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
-import de.quadrathelden.ostereier.config.subsystem.ConfigNpc;
+import de.quadrathelden.ostereier.config.subsystems.ConfigNpc;
 import de.quadrathelden.ostereier.exception.OstereierException;
 import de.quadrathelden.ostereier.shop.ShopManager;
 import de.quadrathelden.ostereier.text.TextManager;

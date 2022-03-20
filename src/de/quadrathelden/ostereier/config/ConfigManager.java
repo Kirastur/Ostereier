@@ -22,14 +22,15 @@ import de.quadrathelden.ostereier.config.score.InternalPlayerPersistentScore;
 import de.quadrathelden.ostereier.config.score.InternalPlayerPersistentScoreCollection;
 import de.quadrathelden.ostereier.config.shop.ConfigShopOffer;
 import de.quadrathelden.ostereier.config.shop.ConfigShopOfferCollection;
-import de.quadrathelden.ostereier.config.subsystem.ConfigBunny;
-import de.quadrathelden.ostereier.config.subsystem.ConfigCalendar;
-import de.quadrathelden.ostereier.config.subsystem.ConfigEconomy;
-import de.quadrathelden.ostereier.config.subsystem.ConfigEditor;
-import de.quadrathelden.ostereier.config.subsystem.ConfigGame;
-import de.quadrathelden.ostereier.config.subsystem.ConfigNpc;
-import de.quadrathelden.ostereier.config.subsystem.ConfigSanity;
-import de.quadrathelden.ostereier.config.subsystem.ConfigScoreboard;
+import de.quadrathelden.ostereier.config.subsystems.ConfigBunny;
+import de.quadrathelden.ostereier.config.subsystems.ConfigCalendar;
+import de.quadrathelden.ostereier.config.subsystems.ConfigEconomy;
+import de.quadrathelden.ostereier.config.subsystems.ConfigEditor;
+import de.quadrathelden.ostereier.config.subsystems.ConfigGame;
+import de.quadrathelden.ostereier.config.subsystems.ConfigNpc;
+import de.quadrathelden.ostereier.config.subsystems.ConfigSanity;
+import de.quadrathelden.ostereier.config.subsystems.ConfigScoreboard;
+import de.quadrathelden.ostereier.config.subsystems.ConfigStatistic;
 import de.quadrathelden.ostereier.exception.OstereierException;
 import de.quadrathelden.ostereier.text.TextManager;
 import de.quadrathelden.ostereier.tools.Coordinate;
@@ -48,6 +49,7 @@ public class ConfigManager {
 	public static final String SECTION_CALENDAR = "calendar";
 	public static final String SECTION_SANITY = "sanity";
 	public static final String SECTION_NPC = "npc";
+	public static final String SECTION_STATISTIC = "statistic";
 	public static final String PARAM_STARTUP_PASSIVEMODE = "passiveMode";
 	public static final String PARAM_STARTUP_MULTIWORLD = "multiWorld";
 	public static final String PARAM_STARTUP_SAFEMODE = "safeMode";
@@ -70,6 +72,7 @@ public class ConfigManager {
 	protected ConfigCalendar configCalendar = new ConfigCalendar();
 	protected ConfigSanity configSanity = new ConfigSanity();
 	protected ConfigNpc configNpc = new ConfigNpc();
+	protected ConfigStatistic configStatistic = new ConfigStatistic();
 
 	protected ConfigDesign configDesign = new ConfigDesign();
 	protected ConfigCurrency configCurrency = new ConfigCurrency();
@@ -204,6 +207,10 @@ public class ConfigManager {
 		return configNpc;
 	}
 
+	public ConfigStatistic getConfigStatistic() {
+		return configStatistic;
+	}
+
 	//
 	// Score Section (Internal Economy Provider)
 	//
@@ -334,6 +341,13 @@ public class ConfigManager {
 			configNpc = new ConfigNpc(plugin.getConfig().getConfigurationSection(SECTION_NPC));
 		} else {
 			configNpc = new ConfigNpc();
+		}
+
+		if (plugin.getConfig().contains(SECTION_STATISTIC, true)
+				&& plugin.getConfig().isConfigurationSection(SECTION_STATISTIC)) {
+			configStatistic = new ConfigStatistic(plugin.getConfig().getConfigurationSection(SECTION_STATISTIC));
+		} else {
+			configStatistic = new ConfigStatistic();
 		}
 
 		configCurrency = new ConfigCurrency(plugin);
