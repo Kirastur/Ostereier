@@ -9,6 +9,7 @@ The plugin arranges an easter egg hunt on your Minecraft server.
 * Scoreboard: Display the collected eggs and points to the player as a scoreboard.
 * Shop: The player can use the collected points to buy items at the integrated shop.
 * Calendar: The Easter egg event can be started and stopped at a certain time of the year via the calendar.
+* Statistic: Interval-based statistics for historical reporting.
 
 # Highlights
 * Multlanguage: All text outputs are multilingual and adapt to the player's language. German and English are supplied as standard. Other languages can be added by customizing the configuration file.
