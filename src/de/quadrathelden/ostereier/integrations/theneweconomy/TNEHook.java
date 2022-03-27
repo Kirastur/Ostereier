@@ -1,4 +1,4 @@
-package de.quadrathelden.ostereier.integrations;
+package de.quadrathelden.ostereier.integrations.theneweconomy;
 
 import java.math.BigDecimal;
 
@@ -8,11 +8,11 @@ import net.tnemc.core.TNE;
 import net.tnemc.core.common.api.TNEAPI;
 import net.tnemc.core.common.currency.TNECurrency;
 
-public class TNEImplementation implements TNEIntegration {
+public class TNEHook implements TNEIntegration {
 
 	protected final TNEAPI tneAPI;
 
-	public TNEImplementation() throws OstereierException {
+	public TNEHook() throws OstereierException {
 		tneAPI = TNE.instance().api();
 		if (tneAPI == null) {
 			throw new OstereierException(Message.ECONOMY_TNE_NOT_AVAIL);

@@ -1,0 +1,5 @@
+templates:
+    demoegg1:
+        elements:
+            egg:
+                material: PUMPKIN

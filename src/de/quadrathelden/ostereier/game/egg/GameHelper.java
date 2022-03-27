@@ -54,7 +54,7 @@ public class GameHelper {
 		return (displayEgg != null);
 	}
 
-	public void drawEgg(ConfigEgg configEgg) {
+	public void drawEgg(ConfigEgg configEgg) throws OstereierException {
 		if (displayEgg != null) {
 			return;
 		}

@@ -1,4 +1,4 @@
-package de.quadrathelden.ostereier.integrations;
+package de.quadrathelden.ostereier.integrations.vault;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
@@ -9,14 +9,14 @@ import de.quadrathelden.ostereier.tools.Message;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-public class VaultImplementation implements VaultIntegration {
+public class VaultHook implements VaultIntegration {
 
 	// We use the demo-code from Vault to perform the integration
 	// see https://github.com/MilkBowl/VaultAPI
 
 	protected final Economy vaultEconomy;
 
-	public VaultImplementation(Plugin plugin) throws OstereierException {
+	public VaultHook(Plugin plugin) throws OstereierException {
 		RegisteredServiceProvider<Economy> rsp = plugin.getServer().getServicesManager().getRegistration(Economy.class);
 		if (rsp == null) {
 			throw new OstereierException(Message.ECONOMY_VAULT_NOT_AVAIL);

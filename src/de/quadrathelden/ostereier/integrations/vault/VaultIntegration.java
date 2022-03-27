@@ -1,4 +1,4 @@
-package de.quadrathelden.ostereier.integrations;
+package de.quadrathelden.ostereier.integrations.vault;
 
 import org.bukkit.OfflinePlayer;
 

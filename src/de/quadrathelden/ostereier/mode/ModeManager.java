@@ -24,7 +24,6 @@ import de.quadrathelden.ostereier.editor.EditorManager;
 import de.quadrathelden.ostereier.exception.OstereierException;
 import de.quadrathelden.ostereier.game.GameManager;
 import de.quadrathelden.ostereier.game.world.GameWorld;
-import de.quadrathelden.ostereier.integrations.CitizensIntegration;
 import de.quadrathelden.ostereier.integrations.IntegrationManager;
 import de.quadrathelden.ostereier.permissions.PermissionManager;
 import de.quadrathelden.ostereier.scoreboard.ScoreboardManager;
@@ -68,7 +67,6 @@ public class ModeManager {
 	protected int sanityCountdown = -1;
 	protected boolean isSanityInitial = false;
 	private boolean disabled = false;
-	protected CitizensIntegration citizensIntegration = null;
 
 	public ModeManager(OstereierOrchestrator orchestrator) {
 		this.plugin = orchestrator.getPlugin();
@@ -84,6 +82,7 @@ public class ModeManager {
 		this.editorManager = orchestrator.getEditorManager();
 		this.gameManager = orchestrator.getGameManager();
 		this.shopManager = orchestrator.getShopManager();
+		integrationManager.initializeStaticIntegrations(orchestrator);
 		modeScheduler = new ModeScheduler(plugin, this);
 		modeListener = new ModeListener(plugin, this);
 		modeListener.enableListener();
@@ -135,6 +134,19 @@ public class ModeManager {
 		if (!textInfoConsole.isEmpty()) {
 			String s = String.format(textInfoConsole, param);
 			plugin.getLogger().info(s);
+		}
+	}
+
+	protected void printInfoException(CommandSender initiator, OstereierException oe) {
+		for (CommandSender myCommandSender : getNotifyReceivers(initiator)) {
+			String textInfo = oe.getLocalizedFullErrorMessage(textManager, myCommandSender);
+			if (!textInfo.isEmpty()) {
+				myCommandSender.sendMessage(textInfo);
+			}
+		}
+		String textInfoConsole = oe.getLocalizedFullErrorMessage(textManager, null);
+		if (!textInfoConsole.isEmpty()) {
+			plugin.getLogger().info(textInfoConsole);
 		}
 	}
 
@@ -387,36 +399,6 @@ public class ModeManager {
 	}
 
 	//
-	// NPC Citizens Integration
-	//
-
-	public boolean isCitizensIntegrationActive() {
-		return (citizensIntegration != null);
-	}
-
-	protected void startCitizensIntegration() throws OstereierException {
-		if (!configManager.getConfigNpc().isEnableCitizensIntegration()) {
-			return;
-		}
-		if (!integrationManager.hasCitizens()) {
-			throw new OstereierException(Message.MODE_CITIZENS_INTEGRATION_FAILED);
-		}
-		citizensIntegration = integrationManager.getCitizensImplementation(shopManager);
-	}
-
-	protected void stopCitizensIntegration() {
-		if (citizensIntegration != null) {
-			citizensIntegration.disable();
-			citizensIntegration = null;
-		}
-	}
-
-	protected void restartCitizensIntegration() throws OstereierException {
-		stopCitizensIntegration();
-		startCitizensIntegration();
-	}
-
-	//
 	// Reload
 	//
 
@@ -430,7 +412,6 @@ public class ModeManager {
 			configManager.reloadConfig();
 			economyManager.updateProvider();
 			statisticManager.updateProvider();
-			restartCitizensIntegration();
 			String defaultRewardCurrency = configManager.getConfigEconomy().getDefaultRewardCurrencyName();
 			ConfigDesign newDesign = configManager.buildConfigDesignFromLocalConfigFile(plugin, defaultRewardCurrency);
 			configManager.replaceDesign(newDesign);
@@ -463,7 +444,7 @@ public class ModeManager {
 			adjustGameToCalendarScheduler();
 			handleSanityScheduler();
 		} catch (OstereierException oe) {
-			printInfoNoParam(null, oe.getMessage());
+			printInfoException(null, oe);
 			oe.printStackTrace();
 		} catch (Exception e) {
 			printInfoNoParam(null, Message.JAVA_EXCEPTION.toString());
@@ -498,6 +479,7 @@ public class ModeManager {
 			scoreboardManager.disable();
 			statisticManager.disable();
 			economyManager.disable();
+			integrationManager.disable();
 			chunkTicketManager.disable();
 		} catch (OstereierException oe) {
 			printInfoNoParam(null, oe.getMessage());

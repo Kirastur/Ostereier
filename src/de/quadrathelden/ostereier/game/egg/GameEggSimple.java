@@ -61,7 +61,7 @@ public abstract class GameEggSimple implements GameEgg {
 		return gameHelper.getBunny();
 	}
 
-	protected void drawEgg() {
+	protected void drawEgg() throws OstereierException {
 		gameHelper.drawEgg(configEgg);
 	}
 

@@ -15,7 +15,7 @@ public class GameEggDefault extends GameEggSimple {
 	}
 
 	@Override
-	public void placeEgg() {
+	public void placeEgg() throws OstereierException {
 		drawEgg();
 		remainingPlacedTime = calculateEggLifetime();
 	}

@@ -18,6 +18,7 @@ import de.quadrathelden.ostereier.displays.DisplayManager;
 import de.quadrathelden.ostereier.events.EditorChangeResult;
 import de.quadrathelden.ostereier.events.EventManager;
 import de.quadrathelden.ostereier.exception.OstereierException;
+import de.quadrathelden.ostereier.integrations.IntegrationManager;
 import de.quadrathelden.ostereier.permissions.PermissionManager;
 import de.quadrathelden.ostereier.text.TextManager;
 import de.quadrathelden.ostereier.tools.Coordinate;
@@ -34,6 +35,7 @@ public class EditorManager {
 	protected final PermissionManager permissionManager;
 	protected final EventManager eventManager;
 	protected final ChunkTicketManager chunkTicketManager;
+	protected final IntegrationManager integrationManager;
 	protected final DisplayManager displayManager;
 
 	protected EditorListener editorListener = null;
@@ -51,8 +53,10 @@ public class EditorManager {
 		this.permissionManager = orchestrator.getPermissionManager();
 		this.eventManager = orchestrator.getEventManager();
 		this.chunkTicketManager = orchestrator.getChunkTicketManager();
+		this.integrationManager = orchestrator.getIntegrationManager();
 		this.displayManager = orchestrator.getDisplayManager();
-		this.editorListener = new EditorListener(plugin, textManager, configManager, permissionManager, this);
+		this.editorListener = new EditorListener(plugin, textManager, configManager, permissionManager, displayManager,
+				this);
 	}
 
 	//
@@ -108,7 +112,7 @@ public class EditorManager {
 	// Draw Subsystem
 	//
 
-	protected void drawEgg(Coordinate coordinate, ConfigEgg egg) {
+	protected void drawEgg(Coordinate coordinate, ConfigEgg egg) throws OstereierException {
 		if (displayActive) {
 			displayManager.drawEgg(editorWorld, coordinate, egg, true, false);
 		}
@@ -118,7 +122,7 @@ public class EditorManager {
 		displayManager.undrawEgg(editorWorld, coordinate); // Ignore displayActive here
 	}
 
-	protected void drawAllEggs() {
+	protected void drawAllEggs() throws OstereierException {
 		if (displayActive) {
 			displayManager.drawAllEditorEggs(editorWorld);
 		}
@@ -128,7 +132,7 @@ public class EditorManager {
 		displayManager.undrawAllEggs(editorWorld); // Ignore displayActive here
 	}
 
-	public void refreshEggs() {
+	public void refreshEggs() throws OstereierException {
 		undrawAllEggs();
 		drawAllEggs();
 	}
@@ -193,8 +197,8 @@ public class EditorManager {
 		}
 
 		ConfigSpawnpoint newSpawnpoint = new ConfigSpawnpoint(editorWorld, coordinate, template, null);
-		addSpawnpoint(newSpawnpoint);
 		drawEgg(coordinate, newSpawnpoint.getEditorEgg());
+		addSpawnpoint(newSpawnpoint);
 	}
 
 	public void removeEgg(Coordinate coordinate) throws OstereierException {
@@ -234,7 +238,7 @@ public class EditorManager {
 		}
 
 		Coordinate clickCoordinate = Coordinate.of(clickLocation);
-		if (findSpawnpoint(clickCoordinate) == null) {
+		if ((findSpawnpoint(clickCoordinate) == null) && (blockFace != null)) {
 			clickCoordinate = clickCoordinate.neighbor(blockFace);
 		}
 

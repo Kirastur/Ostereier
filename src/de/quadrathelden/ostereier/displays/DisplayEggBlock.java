@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Entity;
 
 import de.quadrathelden.ostereier.config.design.ConfigEgg;
 import de.quadrathelden.ostereier.tools.Coordinate;
@@ -33,6 +34,11 @@ public class DisplayEggBlock extends DisplayEggSimple {
 		thisBlock.setBlockData(thisBlockData);
 		undrawBaseplate();
 		restoreTarget();
+	}
+
+	@Override
+	public boolean hasEntity(Entity entity) {
+		return false;
 	}
 
 	@Override

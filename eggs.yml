@@ -11,8 +11,12 @@ demo3:
    rewardAmount: 5
    pickupSound: ENTITY_ITEM_PICKUP
 demo4:
-   material: DRAGON_EGG
    mode: BLOCK
+   material: DRAGON_EGG
    rewardAmount: 1
    rewardCurrency: Dragonpoints
    pickupSound: ENTITY_ENDER_DRAGON_GROWL
+demo5:
+   mode: BALLOON
+   balloon: demoegg1
+   

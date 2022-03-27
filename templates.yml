@@ -12,4 +12,8 @@ template2:
    4:
       egg: demo4
       probability: 1
+template3:
+   5:
+      egg: demo5
+      probability: 1
  

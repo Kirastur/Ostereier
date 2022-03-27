@@ -1,11 +1,13 @@
 package de.quadrathelden.ostereier.api;
 
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -17,6 +19,7 @@ import de.quadrathelden.ostereier.config.design.ConfigEgg;
 import de.quadrathelden.ostereier.config.design.ConfigSpawnpoint;
 import de.quadrathelden.ostereier.config.design.ConfigTemplate;
 import de.quadrathelden.ostereier.config.shop.ConfigShopOffer;
+import de.quadrathelden.ostereier.displays.DisplayManager;
 import de.quadrathelden.ostereier.economy.EconomyManager;
 import de.quadrathelden.ostereier.economy.EconomyProvider;
 import de.quadrathelden.ostereier.editor.EditorManager;
@@ -24,6 +27,7 @@ import de.quadrathelden.ostereier.exception.OstereierException;
 import de.quadrathelden.ostereier.game.GameManager;
 import de.quadrathelden.ostereier.game.egg.GameEgg;
 import de.quadrathelden.ostereier.game.world.PlayerScore;
+import de.quadrathelden.ostereier.integrations.IntegrationManager;
 import de.quadrathelden.ostereier.mode.ModeManager;
 import de.quadrathelden.ostereier.permissions.PermissionManager;
 import de.quadrathelden.ostereier.scoreboard.ScoreboardManager;
@@ -38,8 +42,10 @@ public class OstereierAPI {
 	private final TextManager textManager;
 	private final ConfigManager configManager;
 	private final PermissionManager permissionManager;
+	private final IntegrationManager integrationManager;
 	private final EconomyManager economyManager;
 	private final ScoreboardManager scoreboardManager;
+	private final DisplayManager displayManager;
 	private final EditorManager editorManager;
 	private final GameManager gameManager;
 	private final ShopManager shopManager;
@@ -49,8 +55,10 @@ public class OstereierAPI {
 		this.textManager = orchestrator.getTextManager();
 		this.configManager = orchestrator.getConfigManager();
 		this.permissionManager = orchestrator.getPermissionManager();
+		this.integrationManager = orchestrator.getIntegrationManager();
 		this.economyManager = orchestrator.getEconomyManager();
 		this.scoreboardManager = orchestrator.getScoreboardManager();
+		this.displayManager = orchestrator.getDisplayManager();
 		this.editorManager = orchestrator.getEditorManager();
 		this.gameManager = orchestrator.getGameManager();
 		this.shopManager = orchestrator.getShopManager();
@@ -136,6 +144,11 @@ public class OstereierAPI {
 		return permissionManager.hasNotifyPermission(sender);
 	}
 
+	// IntegrationManager
+	public Set<String> getActiveIntegrations() {
+		return integrationManager.getActiveIntegrations();
+	}
+
 	// EconomyProvider
 	public EconomyProvider getEconomyProvider() {
 		return economyManager.getEconomyProvider();
@@ -156,6 +169,11 @@ public class OstereierAPI {
 
 	public void addScheduledUpdate(Player player) {
 		scoreboardManager.addScheduledUpdate(player);
+	}
+
+	// DisplayManafer
+	public Coordinate findSpawnpointCoordinate(Entity entity) {
+		return displayManager.findSpawnpointCoordinate(entity);
 	}
 
 	// EditorManager

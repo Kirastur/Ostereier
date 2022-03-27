@@ -11,7 +11,7 @@ import de.quadrathelden.ostereier.config.design.ConfigEgg;
 import de.quadrathelden.ostereier.config.subsystems.ConfigEconomy;
 import de.quadrathelden.ostereier.exception.OstereierException;
 import de.quadrathelden.ostereier.integrations.IntegrationManager;
-import de.quadrathelden.ostereier.integrations.TNEIntegration;
+import de.quadrathelden.ostereier.integrations.theneweconomy.TNEIntegration;
 import de.quadrathelden.ostereier.tools.Message;
 
 public class TNEEconomyProvider implements EconomyProvider {
@@ -21,7 +21,7 @@ public class TNEEconomyProvider implements EconomyProvider {
 
 	public TNEEconomyProvider(ConfigManager configManager, IntegrationManager integrationManager) throws OstereierException {
 		this.configManager = configManager;
-		tne = integrationManager.getTNEImplementation();
+		tne = integrationManager.getTNEIntegrationHook();
 		if (tne == null) {
 			throw new OstereierException(Message.ECONOMY_TNE_NOT_AVAIL);
 		}

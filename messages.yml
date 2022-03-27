@@ -44,6 +44,9 @@ reloadCalendarInfo: "The easteregg-event starts at %s and ends at %s"
 reloadDesignInfo_de: "%d Eier, %d Templates und %d Spawnpoints geladen"
 reloadCalendarInfo_de: "Das Ostereier-Event startet am %s und endet am %s"
 
+# BetonQuest
+BetonQuestEggsToCollect: '&2{1} eggs left to collect'
+BetonQuestEggsToCollect_de: '&2Noch {1} Ostereier aufsammeln'
 
 
 # Commands
@@ -71,6 +74,7 @@ CONFIG_EGG_ONLY_EGGS_ALLOWED: "You can only use eggs as Material"
 CONFIG_EGG_MODE_WRONG: "Missing or unknown egg mode"
 CONFIG_EGG_NOT_SOLID: "You can use only solid blocks as eggs"
 CONFIG_EGG_CURRENCY_MISSING: "Reward currency is missing"
+CONFIG_EGG_BALLOON_MISSING: "HeliumBalloon template name is missing"
 CONFIG_EGG_FILE_MISSING: "Cannot find egg config file"
 CONFIG_TEMPLATE_EGG_NOT_FOUND: "Egg not found"
 CONFIG_TEMPLATE_PROBABILITY_RANGE: "Probability out of range for egg"
@@ -133,8 +137,9 @@ MODE_GAME_RUNNING: "In at least one world the game is started"
 MODE_MULTIWORLD_SETUP_WRONG: "In multiworld mode you must place all eggs in one editor world. Please fix your setup"
 MODE_MULTIWORLD_EDITOR_WRONG: "In multiworld mode you must place all eggs in one editor world. Please use that word for further editing"
 MODE_GAME_ALREADY_ACTIVE: "The game is already started in this world"
-MODE_CITIZENS_INTEGRATION_FAILED: "Could not find Citizens plugin"
 
+BALLOON_NOT_AVAIL: "Error connecting to HeliumBalloon"
+BALLOON_TEMPLATE_NOT_FOUND: "HeliumBalloon template not found"
 API_EDITOR_NOT_ACTIVE: "The easteregg editor is not active"
 
 CMD_MODE_MISSING: "Mode is missing"
@@ -164,6 +169,7 @@ CONFIG_EGG_ONLY_EGGS_ALLOWED_de: "Im SafeMode können nur Eier als Materialien v
 CONFIG_EGG_MODE_WRONG_de: "Unbekannter Mode"
 CONFIG_EGG_NOT_SOLID_de: "Als Material für das Ei können nur solide Blöcke verwendet werden"
 CONFIG_EGG_CURRENCY_MISSING_de: "Die Währung für die Belohnung wurde nicht angegeben"
+CONFIG_EGG_BALLOON_MISSING_de: "Das HeliumBalloon Template wurde nicht angegeben"
 CONFIG_EGG_FILE_MISSING_de: "Die Datei für die Eier-Definitionen konnte nicht gefunden werden"
 CONFIG_TEMPLATE_EGG_NOT_FOUND_de: "Das im Template angegebene Ei konnte nicht gefunden werden"
 CONFIG_TEMPLATE_PROBABILITY_RANGE_de: "Die Spawn-Wahrscheinlichkeit für das Ei liegt außerhalb des gültigen Bereichs"
@@ -226,8 +232,9 @@ MODE_GAME_RUNNING_de: "Die Ostereier-Suche ist in mindestens einer Welt gestarte
 MODE_MULTIWORLD_SETUP_WRONG_de: "Im Multiworld-Mode kann nur eine Welt für den Editor verwendet werden. Bitte überprüfe Dein Setup"
 MODE_MULTIWORLD_EDITOR_WRONG_de: "Im Multiworld-Mode kann nur eine Welt für den Editor verwendet werden"
 MODE_GAME_ALREADY_ACTIVE_de: "Die Ostereier-Suche ist in dieser Welt schon aktiv"
-MODE_CITIZENS_INTEGRATION_FAILED_de: "Citizens Plugin nicht gefunden"
 
+BALLOON_NOT_AVAIL_de: "Fehler beim Aufbau einer Verbindung zu HeliumBalloon"
+BALLOON_TEMPLATE_NOT_FOUND_de: "Das in der Ei-Konfiguration angegebene HeliumBalloon-Template konnte nicht gefunden werden"
 API_EDITOR_NOT_ACTIVE_de: "Der Ostereier-Editor ist nicht aktiv"
 
 CMD_MODE_MISSING_de: "Mode fehnt"

@@ -27,6 +27,7 @@ import de.quadrathelden.ostereier.config.subsystems.ConfigCalendar;
 import de.quadrathelden.ostereier.config.subsystems.ConfigEconomy;
 import de.quadrathelden.ostereier.config.subsystems.ConfigEditor;
 import de.quadrathelden.ostereier.config.subsystems.ConfigGame;
+import de.quadrathelden.ostereier.config.subsystems.ConfigIntegration;
 import de.quadrathelden.ostereier.config.subsystems.ConfigNpc;
 import de.quadrathelden.ostereier.config.subsystems.ConfigSanity;
 import de.quadrathelden.ostereier.config.subsystems.ConfigScoreboard;
@@ -50,6 +51,7 @@ public class ConfigManager {
 	public static final String SECTION_SANITY = "sanity";
 	public static final String SECTION_NPC = "npc";
 	public static final String SECTION_STATISTIC = "statistic";
+	public static final String SECTION_INTEGRATION = "integration";
 	public static final String PARAM_STARTUP_PASSIVEMODE = "passiveMode";
 	public static final String PARAM_STARTUP_MULTIWORLD = "multiWorld";
 	public static final String PARAM_STARTUP_SAFEMODE = "safeMode";
@@ -73,6 +75,7 @@ public class ConfigManager {
 	protected ConfigSanity configSanity = new ConfigSanity();
 	protected ConfigNpc configNpc = new ConfigNpc();
 	protected ConfigStatistic configStatistic = new ConfigStatistic();
+	protected ConfigIntegration configIntegration = new ConfigIntegration();
 
 	protected ConfigDesign configDesign = new ConfigDesign();
 	protected ConfigCurrency configCurrency = new ConfigCurrency();
@@ -84,6 +87,12 @@ public class ConfigManager {
 		this.textManager = orchestrator.getTextManager();
 		initializeStaticVariables();
 		saveDefaultMessageConfig(plugin);
+		try {
+			reloadMessages();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		loadIntegration();
 	}
 
 	//
@@ -209,6 +218,10 @@ public class ConfigManager {
 
 	public ConfigStatistic getConfigStatistic() {
 		return configStatistic;
+	}
+
+	public ConfigIntegration getConfigIntegration() {
+		return configIntegration;
 	}
 
 	//
@@ -382,6 +395,15 @@ public class ConfigManager {
 		for (String myKey : fileConfiguration.getKeys(false)) {
 			String myText = fileConfiguration.getString(myKey);
 			textManager.addText(myKey, myText);
+		}
+	}
+
+	public void loadIntegration() {
+		if (plugin.getConfig().contains(SECTION_INTEGRATION, true)
+				&& plugin.getConfig().isConfigurationSection(SECTION_INTEGRATION)) {
+			configIntegration = new ConfigIntegration(plugin.getConfig().getConfigurationSection(SECTION_INTEGRATION));
+		} else {
+			configIntegration = new ConfigIntegration();
 		}
 	}
 

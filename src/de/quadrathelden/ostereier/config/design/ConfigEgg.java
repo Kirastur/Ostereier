@@ -15,25 +15,30 @@ public class ConfigEgg {
 	public static final String REWARD_AMOUNT_NAME = "rewardAmount";
 	public static final String REWARD_CURRENCY_NAME = "rewardCurrency";
 	public static final String PICKUP_SOUND_NAME = "pickupSound";
+	public static final String BALLOON_NAME = "balloon";
+	public static final String CUSTOM_NAME = "custom";
 
 	public static final String DEFAULT_MODE = "ITEM";
 
 	protected final String name;
-	protected Material material;
 	protected ConfigEggMode mode;
+	protected Material material;
 	protected int rewardAmount;
 	protected String rewardCurrency;
 	protected Sound pickupSound;
+	protected String balloon;
+	protected String custom;
 
 	protected ConfigEgg(String name) {
 		this.name = name;
 	}
 
-	public ConfigEgg(String name, Material material, ConfigEggMode mode, int rewardAmount, String rewardCurrency,
-			Sound pickupSound) throws OstereierException {
+	public ConfigEgg(String name, ConfigEggMode mode, Material material, String balloon, int rewardAmount,
+			String rewardCurrency, Sound pickupSound) throws OstereierException {
 		this.name = name;
-		this.material = material;
 		this.mode = mode;
+		this.material = material;
+		this.balloon = balloon;
 		this.rewardAmount = rewardAmount;
 		this.rewardCurrency = rewardCurrency;
 		this.pickupSound = pickupSound;
@@ -42,15 +47,18 @@ public class ConfigEgg {
 
 	public ConfigEgg(ConfigurationSection configurationSection, String defaultCurrency) throws OstereierException {
 		this.name = configurationSection.getName();
+		mode = findEggMode(configurationSection.getString(MODE_NAME, DEFAULT_MODE));
+
 		String materialName = configurationSection.getString(MATERIAL_NAME);
 		if ((materialName == null) || materialName.isEmpty()) {
-			throw new OstereierException(name, Message.CONFIG_EGG_MATERIAL_MISSING, null);
+			material = null;
+		} else {
+			material = Material.getMaterial(materialName);
+			if (material == null) {
+				throw new OstereierException(name, Message.CONFIG_EGG_MATERIAL_UNKNOWN, materialName);
+
+			}
 		}
-		material = Material.getMaterial(materialName);
-		if (material == null) {
-			throw new OstereierException(name, Message.CONFIG_EGG_MATERIAL_UNKNOWN, materialName);
-		}
-		mode = findEggMode(configurationSection.getString(MODE_NAME, DEFAULT_MODE));
 		rewardAmount = configurationSection.getInt(REWARD_AMOUNT_NAME);
 		rewardCurrency = configurationSection.getString(REWARD_CURRENCY_NAME, defaultCurrency);
 		String pickupSoundName = configurationSection.getString(PICKUP_SOUND_NAME);
@@ -62,6 +70,8 @@ public class ConfigEgg {
 			} catch (Exception e) {
 				throw new OstereierException(name, Message.CONFIG_EGG_SOUND_UNKNOWN, pickupSoundName);
 			}
+		balloon = configurationSection.getString(BALLOON_NAME, "");
+		custom = configurationSection.getString(CUSTOM_NAME, "");
 		validate();
 	}
 
@@ -78,12 +88,12 @@ public class ConfigEgg {
 		return name;
 	}
 
-	public Material getMaterial() {
-		return material;
-	}
-
 	public ConfigEggMode getMode() {
 		return mode;
+	}
+
+	public Material getMaterial() {
+		return material;
 	}
 
 	public int getRewardAmount() {
@@ -98,25 +108,43 @@ public class ConfigEgg {
 		return pickupSound;
 	}
 
+	public String getBalloon() {
+		return balloon;
+	}
+
+	public String getCustom() {
+		return custom;
+	}
+
 	protected boolean isSafeMaterial() {
-		return (material.toString().contains("_EGG") || (material == Material.EGG));
+		return (material.toString().contains("_EGG") || (material == Material.EGG) || material == Material.PUMPKIN);
 	}
 
 	protected void validate() throws OstereierException {
-		if (material == null) {
-			throw new OstereierException(name, Message.CONFIG_EGG_MATERIAL_MISSING, null);
-		}
-		if (ConfigManager.isSafemode() && !isSafeMaterial()) {
-			throw new OstereierException(name, Message.CONFIG_EGG_ONLY_EGGS_ALLOWED, material.toString());
-		}
 		if (mode == null) {
 			throw new OstereierException(name, Message.CONFIG_EGG_MODE_WRONG, null);
 		}
+		if ((mode == ConfigEggMode.BLOCK) || (mode == ConfigEggMode.ITEM)) {
+			if (material == null) {
+				throw new OstereierException(name, Message.CONFIG_EGG_MATERIAL_MISSING, null);
+			}
+			if (ConfigManager.isSafemode() && !isSafeMaterial()) {
+				throw new OstereierException(name, Message.CONFIG_EGG_ONLY_EGGS_ALLOWED, material.toString());
+			}
+		}
+
 		if ((mode == ConfigEggMode.BLOCK) && !material.isSolid()) {
 			throw new OstereierException(name, Message.CONFIG_EGG_NOT_SOLID, material.toString());
 		}
+
+		// If config is read from file, the currency is always set.
+		// So this check is only needed for custom designs.
 		if ((rewardCurrency == null) || rewardCurrency.isEmpty()) {
 			throw new OstereierException(name, Message.CONFIG_EGG_CURRENCY_MISSING, null);
+		}
+
+		if ((mode == ConfigEggMode.BALLOON) && ((balloon == null) || (balloon.isEmpty()))) {
+			throw new OstereierException(name, Message.CONFIG_EGG_BALLOON_MISSING, null);
 		}
 	}
 

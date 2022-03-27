@@ -1,12 +1,12 @@
 name: Ostereier
-version: 1.3
+version: 1.4
 description: Ostereiersuche mit Belohnungen
 authors: [Scientarus, Kirastur]
 website: https://www.spigotmc.org/resources/ostereier.100347/
 
 api-version: 1.16
 load: POSTWORLD
-softdepend: [Vault, TheNewEconomy, Citizens]
+softdepend: [Vault, PlaceholderAPI, TheNewEconomy, Citizens, BetonQuest, HeliumBalloon]
 main: de.quadrathelden.ostereier.main.Main
 
 commands:

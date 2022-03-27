@@ -2,6 +2,7 @@ package de.quadrathelden.ostereier.text;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -73,6 +74,10 @@ public class OsterText {
 
 	void addText(String locale, String text) {
 		textMap.put(locale, text);
+	}
+
+	public Set<String> getLocales() {
+		return textMap.keySet();
 	}
 
 }

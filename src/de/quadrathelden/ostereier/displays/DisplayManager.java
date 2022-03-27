@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -19,6 +20,8 @@ import de.quadrathelden.ostereier.config.ConfigManager;
 import de.quadrathelden.ostereier.config.design.ConfigEgg;
 import de.quadrathelden.ostereier.config.design.ConfigSpawnpoint;
 import de.quadrathelden.ostereier.events.EventManager;
+import de.quadrathelden.ostereier.exception.OstereierException;
+import de.quadrathelden.ostereier.integrations.IntegrationManager;
 import de.quadrathelden.ostereier.tools.Coordinate;
 
 public class DisplayManager {
@@ -30,6 +33,7 @@ public class DisplayManager {
 	protected final ConfigManager configManager;
 	protected final EventManager eventManager;
 	protected final ChunkTicketManager chunkTicketManager;
+	protected final IntegrationManager integrationManager;
 
 	protected List<DisplayEgg> displayEggs = new ArrayList<>();
 
@@ -38,6 +42,7 @@ public class DisplayManager {
 		this.configManager = orchestrator.getConfigManager();
 		this.eventManager = orchestrator.getEventManager();
 		this.chunkTicketManager = orchestrator.getChunkTicketManager();
+		this.integrationManager = orchestrator.getIntegrationManager();
 		if (getUuidNamespacedKey() == null) {
 			setUuidNamespacedKey(new NamespacedKey(plugin, NAMESPACE_UUID));
 		}
@@ -78,7 +83,8 @@ public class DisplayManager {
 		itemStack.setItemMeta(itemMeta);
 	}
 
-	protected DisplayEgg buildDisplayEgg(World world, Coordinate coordinate, ConfigEgg configEgg) {
+	protected DisplayEgg buildDisplayEgg(World world, Coordinate coordinate, ConfigEgg configEgg)
+			throws OstereierException {
 		switch (configEgg.getMode()) {
 		case BLOCK:
 			return new DisplayEggBlock(world, coordinate, configEgg);
@@ -86,6 +92,9 @@ public class DisplayManager {
 			return new DisplayEggItem(world, coordinate, configEgg);
 		case CUSTOM:
 			return eventManager.sendCustomDrawEggEvent(world, coordinate, configEgg);
+		case BALLOON:
+			return new DisplayEggBalloon(world, coordinate, configEgg,
+					integrationManager.getHeliumBalloonIntegrationHook());
 		default:
 			return null;
 		}
@@ -110,8 +119,17 @@ public class DisplayManager {
 		return null;
 	}
 
+	public Coordinate findSpawnpointCoordinate(Entity entity) {
+		for (DisplayEgg myDisplayEgg : displayEggs) {
+			if (myDisplayEgg.hasEntity(entity)) {
+				return myDisplayEgg.getCoordinate();
+			}
+		}
+		return null;
+	}
+
 	public DisplayEgg drawEgg(World world, Coordinate coordinate, ConfigEgg configEgg, boolean isEditor,
-			boolean collectable) {
+			boolean collectable) throws OstereierException {
 		DisplayEgg newDisplayEgg = buildDisplayEgg(world, coordinate, configEgg);
 		if (newDisplayEgg == null) {
 			return null;
@@ -136,7 +154,7 @@ public class DisplayManager {
 		undrawEgg(oldDisplayEgg);
 	}
 
-	public void drawAllEditorEggs(World world) {
+	public void drawAllEditorEggs(World world) throws OstereierException {
 		for (ConfigSpawnpoint mySpawnpoint : configManager.getSpawnpoints()) {
 			if (mySpawnpoint.getWorld().equals(world)) {
 				Coordinate myCoordinate = mySpawnpoint.getCoordinate();
@@ -161,7 +179,7 @@ public class DisplayManager {
 			UUID myUUID = readDisplaySeal(myItem.getItemStack());
 			if (myUUID != null && (findDisplayEgg(myUUID) == null)) {
 				myItem.remove();
-				count = count +1;
+				count = count + 1;
 			}
 		}
 		return count;

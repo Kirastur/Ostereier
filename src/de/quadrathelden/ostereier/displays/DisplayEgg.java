@@ -3,6 +3,7 @@ package de.quadrathelden.ostereier.displays;
 import java.util.UUID;
 
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 
 import de.quadrathelden.ostereier.chunktickets.ChunkTicketOwner;
 import de.quadrathelden.ostereier.config.design.ConfigEgg;
@@ -21,6 +22,8 @@ public interface DisplayEgg extends ChunkTicketOwner {
 	public void draw(boolean isEditor, boolean collectable);
 
 	public void undraw();
+
+	public boolean hasEntity(Entity entity);
 
 	public void keepAlive();
 

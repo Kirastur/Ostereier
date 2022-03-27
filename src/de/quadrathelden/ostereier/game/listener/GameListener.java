@@ -3,6 +3,7 @@ package de.quadrathelden.ostereier.game.listener;
 import org.bukkit.plugin.Plugin;
 
 import de.quadrathelden.ostereier.config.ConfigManager;
+import de.quadrathelden.ostereier.displays.DisplayManager;
 import de.quadrathelden.ostereier.game.GameManager;
 import de.quadrathelden.ostereier.permissions.PermissionManager;
 import de.quadrathelden.ostereier.text.TextManager;
@@ -13,6 +14,7 @@ public class GameListener {
 	protected final TextManager textManager;
 	protected final ConfigManager configManager;
 	protected final PermissionManager permissionManager;
+	protected final DisplayManager displayManager;
 	protected final GameManager gameManager;
 
 	protected GamePlayerInteractListener gamePlayerInteractListener = null;
@@ -21,11 +23,12 @@ public class GameListener {
 	protected GameProtectedAreaListener gameProtectedAreaListener = null;
 
 	public GameListener(Plugin plugin, TextManager textManager, ConfigManager configManager,
-			PermissionManager permissionManager, GameManager gameManager) {
+			PermissionManager permissionManager, DisplayManager displayManager, GameManager gameManager) {
 		this.plugin = plugin;
 		this.textManager = textManager;
 		this.configManager = configManager;
 		this.permissionManager = permissionManager;
+		this.displayManager = displayManager;
 		this.gameManager = gameManager;
 	}
 
@@ -35,7 +38,7 @@ public class GameListener {
 						|| configManager.getConfigGame().isCollectUsingPlayerRightClick())
 				&& (gamePlayerInteractListener == null)) {
 			gamePlayerInteractListener = new GamePlayerInteractListener(plugin, textManager, configManager,
-					permissionManager, gameManager);
+					permissionManager, displayManager, gameManager);
 			gamePlayerInteractListener.registerListener();
 		}
 		if (!gameManager.hasActiveGames() && (gamePlayerInteractListener != null)) {

@@ -5,7 +5,7 @@ import org.bukkit.OfflinePlayer;
 import de.quadrathelden.ostereier.config.ConfigManager;
 import de.quadrathelden.ostereier.exception.OstereierException;
 import de.quadrathelden.ostereier.integrations.IntegrationManager;
-import de.quadrathelden.ostereier.integrations.VaultIntegration;
+import de.quadrathelden.ostereier.integrations.vault.VaultIntegration;
 import de.quadrathelden.ostereier.tools.Message;
 
 public class VaultEconomyProvider implements EconomyProvider {
@@ -15,7 +15,7 @@ public class VaultEconomyProvider implements EconomyProvider {
 
 	public VaultEconomyProvider(ConfigManager configManager, IntegrationManager integrationManager) throws OstereierException {
 		this.configManager = configManager;
-		this.vault = integrationManager.getVaultImplementation();
+		this.vault = integrationManager.getVaultIntegrationHook();
 		if (vault == null) {
 			throw new OstereierException(Message.ECONOMY_VAULT_NOT_AVAIL);
 		}

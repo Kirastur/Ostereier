@@ -1,4 +1,4 @@
-package de.quadrathelden.ostereier.integrations;
+package de.quadrathelden.ostereier.integrations.citizens;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -7,7 +7,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
-import de.quadrathelden.ostereier.config.subsystems.ConfigNpc;
+import de.quadrathelden.ostereier.config.ConfigManager;
 import de.quadrathelden.ostereier.exception.OstereierException;
 import de.quadrathelden.ostereier.shop.ShopManager;
 import de.quadrathelden.ostereier.text.TextManager;
@@ -16,34 +16,36 @@ import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
 
-public class CitizensImplementation implements Listener, CitizensIntegration {
+public class CitizensHook implements Listener {
 
 	protected final Plugin plugin;
 	protected final TextManager textManager;
-	protected final ConfigNpc configNpc;
+	protected final ConfigManager configManager;
 	protected final ShopManager shopManager;
 
-	public CitizensImplementation(Plugin plugin, TextManager textManager, ConfigNpc configNpc,
-			ShopManager shopManager) {
+	public CitizensHook(Plugin plugin, TextManager textManager, ConfigManager configManager, ShopManager shopManager) {
 		this.plugin = plugin;
 		this.textManager = textManager;
-		this.configNpc = configNpc;
+		this.configManager = configManager;
 		this.shopManager = shopManager;
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 
 	}
 
-	@Override
 	public void disable() {
 		HandlerList.unregisterAll(this);
 	}
 
 	protected boolean isMatchingNPC(NPC npc) {
-		if (npc.getName().equals(configNpc.getNpcName())) {
+		String configNpcName = configManager.getConfigNpc().getNpcName();
+		if (configNpcName.isEmpty()) {
+			return false;
+		}
+		if (npc.getName().equals(configNpcName)) {
 			return true;
 		}
 		try {
-			int i = Integer.parseInt(configNpc.getNpcName());
+			int i = Integer.parseInt(configNpcName);
 			if (i == npc.getId()) {
 				return true;
 			}
@@ -55,7 +57,7 @@ public class CitizensImplementation implements Listener, CitizensIntegration {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false)
 	public void onNPCLeftClickEvent(NPCLeftClickEvent event) {
-		if (!configNpc.isOpenShopUsingLeftMouseclick() || !isMatchingNPC(event.getNPC())) {
+		if (!configManager.getConfigNpc().isOpenShopUsingLeftMouseclick() || !isMatchingNPC(event.getNPC())) {
 			return;
 		}
 		Player player = event.getClicker();
@@ -74,7 +76,7 @@ public class CitizensImplementation implements Listener, CitizensIntegration {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false)
 	public void onNPCRightClickEvent(NPCRightClickEvent event) {
-		if (!configNpc.isOpenShopUsingRightMouseclick() || !isMatchingNPC(event.getNPC())) {
+		if (!configManager.getConfigNpc().isOpenShopUsingRightMouseclick() || !isMatchingNPC(event.getNPC())) {
 			return;
 		}
 		Player player = event.getClicker();

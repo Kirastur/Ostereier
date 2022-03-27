@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -52,6 +53,11 @@ public class DisplayEggItem extends DisplayEggSimple {
 		item = null;
 		undrawBaseplate();
 		restoreTarget();
+	}
+
+	@Override
+	public boolean hasEntity(Entity entity) {
+		return ((item != null) && item.equals(entity));
 	}
 
 	@Override

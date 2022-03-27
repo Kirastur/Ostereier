@@ -224,6 +224,9 @@ public class GameWorld {
 	}
 
 	public PlayerScore findPlayerScore(OfflinePlayer offlinePlayer) {
+		if (offlinePlayer == null) {
+			return null;
+		}
 		UUID playerUUID = offlinePlayer.getUniqueId();
 		for (PlayerScore myPlayerScore : playerScores) {
 			if (myPlayerScore.getOfflinePlayer().getUniqueId().equals(playerUUID)) {

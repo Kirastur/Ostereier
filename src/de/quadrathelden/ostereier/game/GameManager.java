@@ -60,7 +60,8 @@ public class GameManager {
 		this.statisticManager = orchestrator.getStatisticManager();
 		this.scoreboardManager = orchestrator.getScoreboardManager();
 		this.displayManager = orchestrator.getDisplayManager();
-		this.gameListener = new GameListener(plugin, textManager, configManager, permissionManager, this);
+		this.gameListener = new GameListener(plugin, textManager, configManager, permissionManager, displayManager,
+				this);
 	}
 
 	public Bunny buildBunny(World world) {

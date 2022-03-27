@@ -1,4 +1,4 @@
-package de.quadrathelden.ostereier.integrations;
+package de.quadrathelden.ostereier.integrations.theneweconomy;
 
 import java.math.BigDecimal;
 

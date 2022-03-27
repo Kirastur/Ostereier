@@ -32,7 +32,7 @@ public class StatisticManager {
 	protected Collection<GameDetailEntry> gameDetailsRealtime = Collections.synchronizedCollection(new ArrayList<>());
 	protected LocalDateTime currentIntervalStart;
 	protected LocalDateTime currentIntervalEnd;
-	protected Exception lastAsyncException = null;
+	protected OstereierException lastAsyncException = null;
 
 	protected StatisticOutputProvider statisticOutputProvider = new NoneStatisticOutputProvider();
 
@@ -224,9 +224,9 @@ public class StatisticManager {
 		}
 	}
 
-	public void handleScheduler() throws Exception { // NOSONAR
+	public void handleScheduler() throws OstereierException {
 		if (lastAsyncException != null) {
-			Exception myException = lastAsyncException;
+			OstereierException myException = lastAsyncException;
 			lastAsyncException = null;
 			throw myException;
 		}

@@ -1,5 +1,7 @@
 package de.quadrathelden.ostereier.main;
 
+import java.util.Set;
+
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -46,6 +48,12 @@ public final class Main extends JavaPlugin {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return;
+		}
+
+		Set<String> activeIntegrations = orchestrator.getIntegrationManager().getActiveIntegrations();
+		if (!activeIntegrations.isEmpty()) {
+			String s = String.format("Hooked into %s!", String.join(", ", activeIntegrations));
+			getLogger().info(s);
 		}
 
 		// Load config

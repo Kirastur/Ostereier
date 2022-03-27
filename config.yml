@@ -265,7 +265,7 @@ statistic:
    # - Size of an interval in minutes. An hour (60 min) must be able to be 
    # - broken down into intervals without a remainder.
    # - So valid values are: 1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60
-   intervalSize: 5 
+   intervalSize: 5
    
    # StaticticOutputProvider
    #
@@ -326,17 +326,11 @@ npc:
    # This is done using the 3rd party plugin "citizens".
    # Please see 
    #  https://www.spigotmc.org/resources/citizens.13811/
-
-   # enableCitizensIntegration
-   #
-   # - Enables the integration. If set to true, you must have 
-   # - installed citizens on you server, or the plugin start will fail.
-   enableCitizensIntegration: false
   
    # npcName
    #
    # - ID or the name of the NPC. You can define only one NPC here.
-   npcName: Osterhase
+   #npcName: Osterhase
   
    # openShopUsingLeftMouseclick, openShopUsingLeftMouseclick
    #
@@ -344,4 +338,24 @@ npc:
    # - to open the shop. Currently avail are left and right mouse click.
    openShopUsingLeftMouseclick: true
    openShopUsingRightMouseclick: true
-  
+ 
+ 
+ # Integrations 
+integration:
+ 
+   # We have integration hooks for different plugins.
+   # To enable them you must set the flag to "true" and
+   # install the plugin on your server.
+   #
+   # Normally you can leave all hooks enabled, but if the
+   # plugin has changed its API and the Ostereier intergration
+   # throws an exception, you should disable it here and
+   # notify us, so we can fix it.   
+   #
+   # The settings here are only read at serverstart.
+   vault: true
+   theneweconomy: true
+   citizens: true
+   placeholderapi: true
+   heliumballoon: true
+   betonquest: true
