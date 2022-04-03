@@ -26,16 +26,6 @@
 # - Global settings only read at systemstart
 startup:
 
-   # SafeMode
-   #
-   # - In principle you can use all Meterials as Icon for the eggs.
-   # - But some Materials have special effects which we don't handle
-   # - in our code. Therefore we only allow approved Materials
-   # - as eggs. This is the "SafeMode". If you want to disable
-   # - this check, set the option to "false". 
-   # - Do this on your own risk.
-   safeMode: true
- 
    # MultiWorld
    #
    # - In normal gamemode, the location of each egg is bound to a 
@@ -170,7 +160,7 @@ game:
    collectUsingPlayerRightClick: true
 
    # Players can collect eggs moving next to the egg.
-   collectUsingPlayerMoveToEgg: false
+   collectUsingPlayerMoveToEgg: true
    
    # Players can collect eggs using the micecraft item pickup meachanism
    # (the player must move or stay inside the pickup-radius of the item).

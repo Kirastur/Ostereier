@@ -1,4 +1,4 @@
-template1:
+DemoItem:
    1:
       egg: demo1
       probability: 5
@@ -8,12 +8,24 @@ template1:
    3:
       egg: demo3
       probability: 1
-template2:
-   4:
+
+DemoBlock:
+   1:
       egg: demo4
       probability: 1
-template3:
-   5:
+
+DemoBalloon:
+   1:
       egg: demo5
+      probability: 1
+
+DemoHead:
+   1:
+      egg: demo6
+      probability: 1
+
+DemoAnimal:
+   1:
+      egg: demo7
       probability: 1
  

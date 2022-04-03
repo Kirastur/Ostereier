@@ -1,4 +1,4 @@
-package de.quadrathelden.ostereier.config.design;
+package de.quadrathelden.ostereier.config.spawnpoints;
 
 import java.util.UUID;
 
@@ -6,6 +6,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 
+import de.quadrathelden.ostereier.config.design.ConfigDesign;
+import de.quadrathelden.ostereier.config.design.ConfigEgg;
+import de.quadrathelden.ostereier.config.design.ConfigTemplate;
 import de.quadrathelden.ostereier.exception.OstereierException;
 import de.quadrathelden.ostereier.tools.Coordinate;
 import de.quadrathelden.ostereier.tools.Message;
@@ -40,8 +43,7 @@ public class ConfigSpawnpoint {
 		this.uuid = uuid;
 	}
 
-	public ConfigSpawnpoint(ConfigurationSection configurationSection, ConfigTemplateCollection templateCollection)
-			throws OstereierException {
+	public ConfigSpawnpoint(ConfigurationSection configurationSection, ConfigDesign design) throws OstereierException {
 		String uuidName = configurationSection.getName();
 		uuid = UUID.fromString(uuidName);
 
@@ -57,7 +59,7 @@ public class ConfigSpawnpoint {
 		coordinate = new Coordinate(x, y, z);
 
 		String templateName = configurationSection.getString(TEMPLATE_NAME);
-		template = templateCollection.findTemplate(templateName);
+		template = design.findTemplate(templateName);
 		if (template == null) {
 			throw new OstereierException(uuidName, Message.CONFIG_SPAWNPOINT_TEMPLATE_MISSING, templateName);
 		}

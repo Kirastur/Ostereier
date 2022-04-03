@@ -16,9 +16,10 @@ import org.bukkit.inventory.ItemStack;
 import de.quadrathelden.ostereier.commands.UserAction;
 import de.quadrathelden.ostereier.config.ConfigManager;
 import de.quadrathelden.ostereier.config.design.ConfigEgg;
-import de.quadrathelden.ostereier.config.design.ConfigSpawnpoint;
+import de.quadrathelden.ostereier.config.design.ConfigHead;
 import de.quadrathelden.ostereier.config.design.ConfigTemplate;
 import de.quadrathelden.ostereier.config.shop.ConfigShopOffer;
+import de.quadrathelden.ostereier.config.spawnpoints.ConfigSpawnpoint;
 import de.quadrathelden.ostereier.displays.DisplayManager;
 import de.quadrathelden.ostereier.economy.EconomyManager;
 import de.quadrathelden.ostereier.economy.EconomyProvider;
@@ -75,6 +76,14 @@ public class OstereierAPI {
 	}
 
 	// ConfigManager
+	public ConfigHead findHead(String headName) {
+		return configManager.findHead(headName);
+	}
+
+	public List<ConfigHead> getHeads() {
+		return configManager.getHeads();
+	}
+
 	public ConfigEgg findEgg(String eggName) {
 		return configManager.findEgg(eggName);
 	}

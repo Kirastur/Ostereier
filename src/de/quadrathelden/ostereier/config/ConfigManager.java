@@ -16,12 +16,14 @@ import de.quadrathelden.ostereier.api.OstereierOrchestrator;
 import de.quadrathelden.ostereier.config.currency.ConfigCurrency;
 import de.quadrathelden.ostereier.config.design.ConfigDesign;
 import de.quadrathelden.ostereier.config.design.ConfigEgg;
-import de.quadrathelden.ostereier.config.design.ConfigSpawnpoint;
+import de.quadrathelden.ostereier.config.design.ConfigHead;
 import de.quadrathelden.ostereier.config.design.ConfigTemplate;
 import de.quadrathelden.ostereier.config.score.InternalPlayerPersistentScore;
 import de.quadrathelden.ostereier.config.score.InternalPlayerPersistentScoreCollection;
 import de.quadrathelden.ostereier.config.shop.ConfigShopOffer;
 import de.quadrathelden.ostereier.config.shop.ConfigShopOfferCollection;
+import de.quadrathelden.ostereier.config.spawnpoints.ConfigSpawnpoint;
+import de.quadrathelden.ostereier.config.spawnpoints.ConfigSpawnpointCollection;
 import de.quadrathelden.ostereier.config.subsystems.ConfigBunny;
 import de.quadrathelden.ostereier.config.subsystems.ConfigCalendar;
 import de.quadrathelden.ostereier.config.subsystems.ConfigEconomy;
@@ -32,6 +34,8 @@ import de.quadrathelden.ostereier.config.subsystems.ConfigNpc;
 import de.quadrathelden.ostereier.config.subsystems.ConfigSanity;
 import de.quadrathelden.ostereier.config.subsystems.ConfigScoreboard;
 import de.quadrathelden.ostereier.config.subsystems.ConfigStatistic;
+import de.quadrathelden.ostereier.events.EventManager;
+import de.quadrathelden.ostereier.events.ReloadDesignResult;
 import de.quadrathelden.ostereier.exception.OstereierException;
 import de.quadrathelden.ostereier.text.TextManager;
 import de.quadrathelden.ostereier.tools.Coordinate;
@@ -54,13 +58,11 @@ public class ConfigManager {
 	public static final String SECTION_INTEGRATION = "integration";
 	public static final String PARAM_STARTUP_PASSIVEMODE = "passiveMode";
 	public static final String PARAM_STARTUP_MULTIWORLD = "multiWorld";
-	public static final String PARAM_STARTUP_SAFEMODE = "safeMode";
 	public static final String PARAM_STARTUP_SANITYDELAY = "initialSanityCheckDelay";
 
 	public static final boolean DEFAULT_PASSIVEMODE = false;
 
 	private static boolean multiworld = false;
-	private static boolean safemode = true;
 	private static int initialSanityCheckDelay = 10;
 
 	protected final Plugin plugin;
@@ -78,6 +80,7 @@ public class ConfigManager {
 	protected ConfigIntegration configIntegration = new ConfigIntegration();
 
 	protected ConfigDesign configDesign = new ConfigDesign();
+	protected ConfigSpawnpointCollection configSpawnpointCollection;
 	protected ConfigCurrency configCurrency = new ConfigCurrency();
 	protected InternalPlayerPersistentScoreCollection internalPlayerPersistentScoreCollection = null;
 	protected ConfigShopOfferCollection configShopOfferCollection = new ConfigShopOfferCollection();
@@ -85,14 +88,15 @@ public class ConfigManager {
 	public ConfigManager(OstereierOrchestrator orchestrator) {
 		this.plugin = orchestrator.getPlugin();
 		this.textManager = orchestrator.getTextManager();
-		initializeStaticVariables();
+		configSpawnpointCollection = new ConfigSpawnpointCollection(plugin);
+		initializeStaticVariables(); // SafeDefaultConfig is done in Main
 		saveDefaultMessageConfig(plugin);
 		try {
 			reloadMessages();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		loadIntegration();
+		loadInitialIntegrationConfig();
 	}
 
 	//
@@ -112,14 +116,6 @@ public class ConfigManager {
 		ConfigManager.multiworld = multiworld;
 	}
 
-	public static boolean isSafemode() {
-		return safemode;
-	}
-
-	protected static void setSafemode(boolean safemode) {
-		ConfigManager.safemode = safemode;
-	}
-
 	public static int getInitialSanityCheckDelay() {
 		return initialSanityCheckDelay;
 	}
@@ -131,7 +127,6 @@ public class ConfigManager {
 	protected void initializeStaticVariables() {
 		ConfigurationSection startupConfigurationSection = plugin.getConfig().getConfigurationSection(SECTION_STARTUP);
 		setMultiworld(startupConfigurationSection.getBoolean(PARAM_STARTUP_MULTIWORLD, multiworld));
-		setSafemode(startupConfigurationSection.getBoolean(PARAM_STARTUP_SAFEMODE, safemode));
 		setInitialSanityCheckDelay(
 				startupConfigurationSection.getInt(PARAM_STARTUP_SANITYDELAY, initialSanityCheckDelay));
 	}
@@ -139,6 +134,14 @@ public class ConfigManager {
 	//
 	// Design section
 	//
+
+	public ConfigHead findHead(String headName) {
+		return configDesign.findHead(headName);
+	}
+
+	public List<ConfigHead> getHeads() {
+		return configDesign.getHeads();
+	}
 
 	public ConfigEgg findEgg(String eggName) {
 		return configDesign.findEgg(eggName);
@@ -156,28 +159,32 @@ public class ConfigManager {
 		return configDesign.getTemplates();
 	}
 
+	//
+	// Spawnpoint section
+	//
+
 	public ConfigSpawnpoint findSpawnpoint(World world, Coordinate coordinate) {
-		return configDesign.findSpawnpoint(world, coordinate);
+		return configSpawnpointCollection.findSpawnpoint(world, coordinate);
 	}
 
 	public List<ConfigSpawnpoint> getSpawnpoints() {
-		return configDesign.getSpawnpoints();
+		return configSpawnpointCollection.getSpawnpoints();
 	}
 
 	public List<ConfigSpawnpoint> getSpawnpointsForWorld(World world) {
-		return configDesign.getSpawnpointsForWorld(world);
+		return configSpawnpointCollection.getSpawnpointsForWorld(world);
 	}
 
 	public List<World> getPopulatedWorlds() {
-		return configDesign.getPopulatedWorlds();
+		return configSpawnpointCollection.getPopulatedWorlds();
 	}
 
 	public void addSpawnpoint(ConfigSpawnpoint spawnpoint) throws OstereierException {
-		configDesign.addSpawnpoint(spawnpoint);
+		configSpawnpointCollection.addSpawnpoint(spawnpoint);
 	}
 
 	public void removeSpawnpoint(ConfigSpawnpoint spawnpoint) throws OstereierException {
-		configDesign.removeSpawnpoint(spawnpoint);
+		configSpawnpointCollection.removeSpawnpoint(spawnpoint);
 	}
 
 	//
@@ -225,6 +232,26 @@ public class ConfigManager {
 	}
 
 	//
+	// Currency Section
+	//
+
+	public String findCurrency(int amount, String currencyName, CommandSender sender) {
+		return configCurrency.findCurrency(amount, currencyName, sender);
+	}
+
+	//
+	// Shop Section
+	//
+
+	public ConfigShopOffer findShopOffer(String offerId) {
+		return configShopOfferCollection.findShopOffer(offerId);
+	}
+
+	public List<ConfigShopOffer> getShopOffers() {
+		return configShopOfferCollection.getShopOffers();
+	}
+
+	//
 	// Score Section (Internal Economy Provider)
 	//
 
@@ -264,40 +291,51 @@ public class ConfigManager {
 		}
 	}
 
-	//
-	// Currency Section
-	//
-
-	public String findCurrency(int amount, String currencyName, CommandSender sender) {
-		return configCurrency.findCurrency(amount, currencyName, sender);
+	public void openInternalPlayerPersistentScore() throws OstereierException {
+		internalPlayerPersistentScoreCollection = new InternalPlayerPersistentScoreCollection(plugin, true);
 	}
 
-	//
-	// Shop Section
-	//
-
-	public ConfigShopOffer findShopOffer(String offerId) {
-		return configShopOfferCollection.findShopOffer(offerId);
-	}
-
-	public List<ConfigShopOffer> getShopOffers() {
-		return configShopOfferCollection.getShopOffers();
+	public void closeInternalPlayerPersistentScore() throws OstereierException {
+		if (internalPlayerPersistentScoreCollection != null) {
+			internalPlayerPersistentScoreCollection.saveScores();
+			internalPlayerPersistentScoreCollection = null;
+		}
 	}
 
 	//
 	// Admin and reload section
 	//
 
-	public ConfigDesign buildConfigDesignFromLocalConfigFile(Plugin filePlugin, String defaultCurrency)
-			throws OstereierException {
-		return new ConfigDesign(filePlugin, defaultCurrency);
+	protected void saveDefaultMessageConfig(Plugin plugin) {
+		if (!new File(plugin.getDataFolder(), MESSAGE_FILENAME).exists()) {
+			plugin.saveResource(MESSAGE_FILENAME, false);
+		}
 	}
 
-	public void replaceDesign(ConfigDesign newConfigSection) {
-		configDesign = newConfigSection;
+	protected void reloadMessages() throws OstereierException {
+		File messageFile = new File(plugin.getDataFolder(), MESSAGE_FILENAME);
+		if (!messageFile.exists()) {
+			throw new OstereierException(null, Message.CONFIG_MESSAGE_FILE_MISSING, MESSAGE_FILENAME);
+		}
+		FileConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(messageFile);
+
+		textManager.clear();
+		for (String myKey : fileConfiguration.getKeys(false)) {
+			String myText = fileConfiguration.getString(myKey);
+			textManager.addText(myKey, myText);
+		}
 	}
 
-	public void reloadConfig() throws OstereierException { // NOSONAR
+	protected void loadInitialIntegrationConfig() {
+		if (plugin.getConfig().contains(SECTION_INTEGRATION, true)
+				&& plugin.getConfig().isConfigurationSection(SECTION_INTEGRATION)) {
+			configIntegration = new ConfigIntegration(plugin.getConfig().getConfigurationSection(SECTION_INTEGRATION));
+		} else {
+			configIntegration = new ConfigIntegration();
+		}
+	}
+
+	protected void reloadSubsystemConfig() throws OstereierException { // NOSONAR
 		plugin.reloadConfig();
 
 		if (plugin.getConfig().contains(SECTION_EDITOR, true)
@@ -362,49 +400,48 @@ public class ConfigManager {
 		} else {
 			configStatistic = new ConfigStatistic();
 		}
+	}
 
+	public ConfigDesign buildConfigDesignFromLocalConfigFile(Plugin filePlugin) throws OstereierException {
+		return new ConfigDesign(filePlugin, getConfigEconomy().getDefaultRewardCurrencyName());
+	}
+
+	public ConfigSpawnpointCollection buildDefaultSpawnpointCollection() throws OstereierException {
+		return new ConfigSpawnpointCollection(plugin, configDesign);
+	}
+
+	protected void reloadDesign(EventManager eventManager) throws OstereierException {
+		ReloadDesignResult reloadDesignResult = eventManager.sendReloadDesignEvent();
+		if (reloadDesignResult == null) {
+			return;
+		}
+		if (reloadDesignResult.configDesign() != null) {
+			configDesign = reloadDesignResult.configDesign();
+		} else {
+			configDesign = buildConfigDesignFromLocalConfigFile(plugin);
+		}
+		if (reloadDesignResult.configSpawnpointCollection() != null) {
+			configSpawnpointCollection = reloadDesignResult.configSpawnpointCollection();
+		} else {
+			configSpawnpointCollection = buildDefaultSpawnpointCollection();
+		}
+	}
+
+	public void reloadConfig(EventManager eventManager) throws OstereierException {
+
+		// 1. Reload Messages
+		reloadMessages();
+
+		// 2. Reload System config
+		reloadSubsystemConfig();
+
+		// 2. Reload other config parts
 		configCurrency = new ConfigCurrency(plugin);
 		configShopOfferCollection = new ConfigShopOfferCollection(plugin, configEconomy.getDefaultRewardCurrencyName());
-	}
 
-	public void openInternalPlayerPersistentScore() throws OstereierException {
-		internalPlayerPersistentScoreCollection = new InternalPlayerPersistentScoreCollection(plugin, true);
-	}
+		// 4. Reload Design and Spawnpoints
+		reloadDesign(eventManager);
 
-	public void closeInternalPlayerPersistentScore() throws OstereierException {
-		if (internalPlayerPersistentScoreCollection != null) {
-			internalPlayerPersistentScoreCollection.saveScores();
-			internalPlayerPersistentScoreCollection = null;
-		}
-	}
-
-	protected void saveDefaultMessageConfig(Plugin plugin) {
-		if (!new File(plugin.getDataFolder(), MESSAGE_FILENAME).exists()) {
-			plugin.saveResource(MESSAGE_FILENAME, false);
-		}
-	}
-
-	public void reloadMessages() throws OstereierException {
-		File messageFile = new File(plugin.getDataFolder(), MESSAGE_FILENAME);
-		if (!messageFile.exists()) {
-			throw new OstereierException(null, Message.CONFIG_MESSAGE_FILE_MISSING, MESSAGE_FILENAME);
-		}
-		FileConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(messageFile);
-
-		textManager.clear();
-		for (String myKey : fileConfiguration.getKeys(false)) {
-			String myText = fileConfiguration.getString(myKey);
-			textManager.addText(myKey, myText);
-		}
-	}
-
-	public void loadIntegration() {
-		if (plugin.getConfig().contains(SECTION_INTEGRATION, true)
-				&& plugin.getConfig().isConfigurationSection(SECTION_INTEGRATION)) {
-			configIntegration = new ConfigIntegration(plugin.getConfig().getConfigurationSection(SECTION_INTEGRATION));
-		} else {
-			configIntegration = new ConfigIntegration();
-		}
 	}
 
 }

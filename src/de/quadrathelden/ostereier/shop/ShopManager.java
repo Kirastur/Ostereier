@@ -239,13 +239,8 @@ public class ShopManager {
 	}
 
 	protected boolean isStackable(ItemStack itemStack1, ItemStack itemStack2) {
-		if ((itemStack1 == null) || (itemStack2 == null)) {
-			return false;
-		}
-		if (!itemStack1.getType().equals(itemStack2.getType())) {
-			return false;
-		}
-		if ((itemStack1.getMaxStackSize() == 1) || (itemStack2.getMaxStackSize() == 1)) {
+		if ((itemStack1 == null) || (itemStack2 == null) || (itemStack1.getMaxStackSize() == 1)
+				|| (itemStack2.getMaxStackSize() == 1) || !itemStack1.getType().equals(itemStack2.getType())) {
 			return false;
 		}
 		ItemSeal itemSeal1 = readItemSeal(itemStack1);

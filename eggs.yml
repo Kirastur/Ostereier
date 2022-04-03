@@ -19,4 +19,9 @@ demo4:
 demo5:
    mode: BALLOON
    balloon: demoegg1
-   
+demo6:
+   material: PLAYER_HEAD
+   head: "rainbow-dice-all-2s"
+demo7:
+   mode: ANIMAL
+   animal: RABBIT

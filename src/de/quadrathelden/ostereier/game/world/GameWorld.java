@@ -14,11 +14,13 @@ import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import de.quadrathelden.ostereier.bunny.Bunny;
 import de.quadrathelden.ostereier.config.ConfigManager;
 import de.quadrathelden.ostereier.config.design.ConfigEgg;
-import de.quadrathelden.ostereier.config.design.ConfigSpawnpoint;
+import de.quadrathelden.ostereier.config.design.ConfigEggMode;
+import de.quadrathelden.ostereier.config.spawnpoints.ConfigSpawnpoint;
 import de.quadrathelden.ostereier.displays.DisplayManager;
 import de.quadrathelden.ostereier.economy.EconomyManager;
 import de.quadrathelden.ostereier.economy.EconomyProvider;
@@ -191,8 +193,13 @@ public class GameWorld {
 		int count = 0;
 		for (GameEgg myGameEgg : gameEggs) {
 			if (myGameEgg.isPlaced()) {
-				Location myGameEgLocation = myGameEgg.getCoordinate().toLocation(world);
-				double distance = toLocation.distance(myGameEgLocation);
+				Location myGameEggLocation = myGameEgg.getCoordinate().toLocation(world);
+				ConfigEggMode myConfigEggMode = myGameEgg.getConfigEgg().getMode();
+				if ((myConfigEggMode == ConfigEggMode.BLOCK) || (myConfigEggMode == ConfigEggMode.BALLOON)
+						|| (myConfigEggMode == ConfigEggMode.ANIMAL)) {
+					myGameEggLocation = myGameEggLocation.add(new Vector(0.5, 0.0, 0.5));
+				}
+				double distance = toLocation.distance(myGameEggLocation);
 				if (distance < 1.0) {
 					if (myGameEgg.pickupEgg(player)) { // NOSONAR
 						count = count + 1;

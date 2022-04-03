@@ -9,8 +9,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import de.quadrathelden.ostereier.config.design.ConfigSpawnpoint;
 import de.quadrathelden.ostereier.config.design.ConfigTemplate;
+import de.quadrathelden.ostereier.config.spawnpoints.ConfigSpawnpoint;
 import de.quadrathelden.ostereier.exception.OstereierException;
 import de.quadrathelden.ostereier.main.Main;
 import de.quadrathelden.ostereier.tools.Message;

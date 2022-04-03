@@ -15,12 +15,12 @@ import org.bukkit.plugin.Plugin;
 import de.quadrathelden.ostereier.api.OstereierOrchestrator;
 import de.quadrathelden.ostereier.chunktickets.ChunkTicketManager;
 import de.quadrathelden.ostereier.config.ConfigManager;
-import de.quadrathelden.ostereier.config.design.ConfigDesign;
 import de.quadrathelden.ostereier.config.design.ConfigTemplate;
 import de.quadrathelden.ostereier.config.subsystems.ConfigCalendar;
 import de.quadrathelden.ostereier.displays.DisplayManager;
 import de.quadrathelden.ostereier.economy.EconomyManager;
 import de.quadrathelden.ostereier.editor.EditorManager;
+import de.quadrathelden.ostereier.events.EventManager;
 import de.quadrathelden.ostereier.exception.OstereierException;
 import de.quadrathelden.ostereier.game.GameManager;
 import de.quadrathelden.ostereier.game.world.GameWorld;
@@ -50,6 +50,7 @@ public class ModeManager {
 	protected final TextManager textManager;
 	protected final ConfigManager configManager;
 	protected final PermissionManager permissionManager;
+	protected final EventManager eventManager;
 	protected final ChunkTicketManager chunkTicketManager;
 	protected final IntegrationManager integrationManager;
 	protected final EconomyManager economyManager;
@@ -73,6 +74,7 @@ public class ModeManager {
 		this.textManager = orchestrator.getTextManager();
 		this.configManager = orchestrator.getConfigManager();
 		this.permissionManager = orchestrator.getPermissionManager();
+		this.eventManager = orchestrator.getEventManager();
 		this.chunkTicketManager = orchestrator.getChunkTicketManager();
 		this.integrationManager = orchestrator.getIntegrationManager();
 		this.economyManager = orchestrator.getEconomyManager();
@@ -84,7 +86,7 @@ public class ModeManager {
 		this.shopManager = orchestrator.getShopManager();
 		integrationManager.initializeStaticIntegrations(orchestrator);
 		modeScheduler = new ModeScheduler(plugin, this);
-		modeListener = new ModeListener(plugin, this);
+		modeListener = new ModeListener(plugin, displayManager, this);
 		modeListener.enableListener();
 		if (ConfigManager.getInitialSanityCheckDelay() > 0) {
 			sanityCountdown = ConfigManager.getInitialSanityCheckDelay();
@@ -408,13 +410,9 @@ public class ModeManager {
 		checkNotGame();
 
 		try {
-			configManager.reloadMessages();
-			configManager.reloadConfig();
+			configManager.reloadConfig(eventManager);
 			economyManager.updateProvider();
 			statisticManager.updateProvider();
-			String defaultRewardCurrency = configManager.getConfigEconomy().getDefaultRewardCurrencyName();
-			ConfigDesign newDesign = configManager.buildConfigDesignFromLocalConfigFile(plugin, defaultRewardCurrency);
-			configManager.replaceDesign(newDesign);
 		} catch (OstereierException oe) {
 			throw oe;
 		} catch (Exception e) {

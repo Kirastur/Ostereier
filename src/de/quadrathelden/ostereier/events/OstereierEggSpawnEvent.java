@@ -5,7 +5,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import de.quadrathelden.ostereier.config.design.ConfigEgg;
-import de.quadrathelden.ostereier.config.design.ConfigSpawnpoint;
+import de.quadrathelden.ostereier.config.spawnpoints.ConfigSpawnpoint;
 import de.quadrathelden.ostereier.game.egg.GameEgg;
 
 public class OstereierEggSpawnEvent extends Event {

@@ -14,8 +14,8 @@ import org.bukkit.entity.Player;
 import de.quadrathelden.ostereier.api.OstereierAPI;
 import de.quadrathelden.ostereier.api.OstereierProvider;
 import de.quadrathelden.ostereier.config.design.ConfigEgg;
-import de.quadrathelden.ostereier.config.design.ConfigSpawnpoint;
 import de.quadrathelden.ostereier.config.design.ConfigTemplate;
+import de.quadrathelden.ostereier.config.spawnpoints.ConfigSpawnpoint;
 import de.quadrathelden.ostereier.exception.OstereierException;
 import de.quadrathelden.ostereier.tools.Message;
 

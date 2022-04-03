@@ -18,7 +18,7 @@ import de.quadrathelden.ostereier.api.OstereierOrchestrator;
 import de.quadrathelden.ostereier.chunktickets.ChunkTicketManager;
 import de.quadrathelden.ostereier.config.ConfigManager;
 import de.quadrathelden.ostereier.config.design.ConfigEgg;
-import de.quadrathelden.ostereier.config.design.ConfigSpawnpoint;
+import de.quadrathelden.ostereier.config.spawnpoints.ConfigSpawnpoint;
 import de.quadrathelden.ostereier.events.EventManager;
 import de.quadrathelden.ostereier.exception.OstereierException;
 import de.quadrathelden.ostereier.integrations.IntegrationManager;
@@ -90,6 +90,8 @@ public class DisplayManager {
 			return new DisplayEggBlock(world, coordinate, configEgg);
 		case ITEM:
 			return new DisplayEggItem(world, coordinate, configEgg);
+		case ANIMAL:
+			return new DisplayEggAnimal(world, coordinate, configEgg, eventManager);
 		case CUSTOM:
 			return eventManager.sendCustomDrawEggEvent(world, coordinate, configEgg);
 		case BALLOON:

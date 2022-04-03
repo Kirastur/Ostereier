@@ -1,4 +1,4 @@
-package de.quadrathelden.ostereier.config.design;
+package de.quadrathelden.ostereier.config.spawnpoints;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +14,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import de.quadrathelden.ostereier.config.ConfigManager;
+import de.quadrathelden.ostereier.config.design.ConfigDesign;
 import de.quadrathelden.ostereier.exception.OstereierException;
 import de.quadrathelden.ostereier.tools.Coordinate;
 import de.quadrathelden.ostereier.tools.Message;
@@ -29,17 +30,16 @@ public class ConfigSpawnpointCollection {
 		this.plugin = null;
 	}
 
-	protected ConfigSpawnpointCollection(Plugin plugin) {
+	public ConfigSpawnpointCollection(Plugin plugin) {
 		this.plugin = plugin;
 	}
 
-	public ConfigSpawnpointCollection(Plugin plugin, ConfigTemplateCollection templateCollection)
-			throws OstereierException {
+	public ConfigSpawnpointCollection(Plugin plugin, ConfigDesign design) throws OstereierException {
 		this.plugin = plugin;
-		loadAllSpawnpoints(templateCollection);
+		loadAllSpawnpoints(design);
 	}
 
-	void loadAllSpawnpoints(ConfigTemplateCollection templateCollection) throws OstereierException {
+	protected void loadAllSpawnpoints(ConfigDesign design) throws OstereierException {
 		File spawnpointFile = new File(plugin.getDataFolder(), SPAWNPOINT_FILENAME);
 		try {
 			if (!spawnpointFile.exists() && !spawnpointFile.createNewFile()) {
@@ -53,7 +53,7 @@ public class ConfigSpawnpointCollection {
 		for (String myKey : spawnpointFileConfiguration.getKeys(false)) {
 			if (spawnpointFileConfiguration.isConfigurationSection(myKey)) {
 				ConfigSpawnpoint mySpawnpoint = new ConfigSpawnpoint(
-						spawnpointFileConfiguration.getConfigurationSection(myKey), templateCollection);
+						spawnpointFileConfiguration.getConfigurationSection(myKey), design);
 				spawnpoints.add(mySpawnpoint);
 			}
 		}
@@ -81,7 +81,7 @@ public class ConfigSpawnpointCollection {
 		return new ArrayList<>(spawnpoints);
 	}
 
-	public List<World> getPopulatedWorld() {
+	public List<World> getPopulatedWorlds() {
 		Set<World> populatedWorlds = new HashSet<>();
 		for (ConfigSpawnpoint mySpawnpoint : spawnpoints) {
 			populatedWorlds.add(mySpawnpoint.getWorld());
@@ -90,6 +90,10 @@ public class ConfigSpawnpointCollection {
 	}
 
 	public void addSpawnpoint(ConfigSpawnpoint spawnpoint) throws OstereierException {
+		if (findSpawnpoint(spawnpoint.getWorld(), spawnpoint.getCoordinate()) != null) {
+			throw new OstereierException(null, Message.CONFIG_SPAWNPOINT_DUPLICATE,
+					spawnpoint.getCoordinate().toString());
+		}
 		File spawnpointFile = new File(plugin.getDataFolder(), SPAWNPOINT_FILENAME);
 		if (!spawnpointFile.exists()) {
 			throw new OstereierException(null, Message.CONFIG_SPAWNPOINT_FILE_MISSING, SPAWNPOINT_FILENAME);

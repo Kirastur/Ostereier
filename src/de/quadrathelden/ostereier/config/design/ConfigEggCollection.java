@@ -24,9 +24,10 @@ public class ConfigEggCollection {
 		this.eggs.addAll(eggs);
 	}
 
-	public ConfigEggCollection(Plugin plugin, String defaultCurrency) throws OstereierException {
+	public ConfigEggCollection(Plugin plugin, ConfigHeadCollection headCollection, String defaultCurrency)
+			throws OstereierException {
 		saveDefaultEggConfig(plugin);
-		loadAllEggs(plugin, defaultCurrency);
+		loadAllEggs(plugin, headCollection, defaultCurrency);
 	}
 
 	protected void saveDefaultEggConfig(Plugin plugin) {
@@ -35,7 +36,8 @@ public class ConfigEggCollection {
 		}
 	}
 
-	protected void loadAllEggs(Plugin plugin, String defaultCurrency) throws OstereierException {
+	protected void loadAllEggs(Plugin plugin, ConfigHeadCollection headCollection, String defaultCurrency)
+			throws OstereierException {
 		File eggFile = new File(plugin.getDataFolder(), EGG_FILENAME);
 		if (!eggFile.exists()) {
 			throw new OstereierException(null, Message.CONFIG_EGG_FILE_MISSING, EGG_FILENAME);
@@ -44,7 +46,8 @@ public class ConfigEggCollection {
 
 		for (String myKey : fileConfiguration.getKeys(false)) {
 			if (fileConfiguration.isConfigurationSection(myKey)) {
-				ConfigEgg myEgg = new ConfigEgg(fileConfiguration.getConfigurationSection(myKey), defaultCurrency);
+				ConfigEgg myEgg = new ConfigEgg(fileConfiguration.getConfigurationSection(myKey), headCollection,
+						defaultCurrency);
 				eggs.add(myEgg);
 			}
 		}

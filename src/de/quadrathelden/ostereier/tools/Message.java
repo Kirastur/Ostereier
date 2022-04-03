@@ -8,14 +8,21 @@ public enum Message {
 
 	ORCHESTRATOR_ALREADY_RUNNING, // Can't start orchestrator, another instance is already running
 
+	CONFIG_HEAD_DATA_WRONG, // Cannot decode data
+	CONFIG_HEAD_FILE_MISSING, // Cannot find head config file
+	CONFIG_EGG_MODE_MISSING, // Egg Mode is missing
+	CONFIG_EGG_MODE_UNKNOWN, // Unknown egg mode
 	CONFIG_EGG_MATERIAL_MISSING, // Material for egg is missing
 	CONFIG_EGG_MATERIAL_UNKNOWN, // Unknown Material
-	CONFIG_EGG_SOUND_UNKNOWN, // Unknown Sound
-	CONFIG_EGG_ONLY_EGGS_ALLOWED, // You can only use eggs as Material
-	CONFIG_EGG_MODE_WRONG, // Missing or unknown egg mode
-	CONFIG_EGG_NOT_SOLID, // You can use only solid blocks as eggs
-	CONFIG_EGG_CURRENCY_MISSING, // Reward currency is missing
+	CONFIG_EGG_INAPPROPRIATE_MATERIAL, // Material does not fit to mode
+	CONFIG_EGG_ANIMAL_MISSING, // Animal is missing
+	CONFIG_EGG_ANIMAL_UNKNOWN, // Unknown animal
+	CONFIG_EGG_INAPPROPRIATE_ENTITY, // The given entity is not a valid animal
+	CONFIG_EGG_HEAD_MISSING, // Custom head name is missing
+	CONFIG_EGG_HEAD_UNKNOWN, // Unknown custom head name
 	CONFIG_EGG_BALLOON_MISSING, // HeliumBalloon template name is missing
+	CONFIG_EGG_SOUND_UNKNOWN, // Unknown Sound
+	CONFIG_EGG_CURRENCY_MISSING, // Reward currency is missing
 	CONFIG_EGG_FILE_MISSING, // Cannot find egg config file
 	CONFIG_TEMPLATE_EGG_NOT_FOUND, // Egg not found
 	CONFIG_TEMPLATE_PROBABILITY_RANGE, // Probability out of range for egg

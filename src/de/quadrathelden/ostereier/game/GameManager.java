@@ -16,7 +16,7 @@ import de.quadrathelden.ostereier.bunny.DefaultBunny;
 import de.quadrathelden.ostereier.chunktickets.ChunkTicketManager;
 import de.quadrathelden.ostereier.config.ConfigManager;
 import de.quadrathelden.ostereier.config.design.ConfigEgg;
-import de.quadrathelden.ostereier.config.design.ConfigSpawnpoint;
+import de.quadrathelden.ostereier.config.spawnpoints.ConfigSpawnpoint;
 import de.quadrathelden.ostereier.displays.DisplayManager;
 import de.quadrathelden.ostereier.economy.EconomyManager;
 import de.quadrathelden.ostereier.events.EventManager;

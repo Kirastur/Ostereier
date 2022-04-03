@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.World;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -16,9 +17,9 @@ import de.quadrathelden.ostereier.api.OstereierOrchestrator;
 import de.quadrathelden.ostereier.bunny.Bunny;
 import de.quadrathelden.ostereier.config.ConfigManager;
 import de.quadrathelden.ostereier.config.design.ConfigEgg;
-import de.quadrathelden.ostereier.config.design.ConfigSpawnpoint;
 import de.quadrathelden.ostereier.config.design.ConfigTemplate;
 import de.quadrathelden.ostereier.config.shop.ConfigShopOffer;
+import de.quadrathelden.ostereier.config.spawnpoints.ConfigSpawnpoint;
 import de.quadrathelden.ostereier.displays.DisplayEgg;
 import de.quadrathelden.ostereier.economy.EconomyProvider;
 import de.quadrathelden.ostereier.exception.OstereierException;
@@ -44,24 +45,17 @@ public class EventManager {
 		return event.getDisplayEgg();
 	}
 
+	public LivingEntity sendRefineAnimalEvent(LivingEntity livingEntiry, ConfigEgg configEgg, boolean isEditor) {
+		OstereierRefineAnimalEvent event = new OstereierRefineAnimalEvent(livingEntiry, configEgg, isEditor);
+		plugin.getServer().getPluginManager().callEvent(event);
+		return event.getLivingEntity();
+	}
+
 	public EditorChangeResult sendEditorChangeEvent(World world, ConfigTemplate template) {
 		OstereierEditorChangeEvent event = new OstereierEditorChangeEvent(world, template,
 				configManager.getConfigEditor());
 		plugin.getServer().getPluginManager().callEvent(event);
 		return event.getResult();
-	}
-
-	public EconomyProvider sendGetCustomEconomyProvider() throws OstereierException {
-		OstereierGetCustomEconomyProviderEvent event = new OstereierGetCustomEconomyProviderEvent(
-				configManager.getConfigEconomy());
-		plugin.getServer().getPluginManager().callEvent(event);
-		if (!event.isCancelled()) {
-			return event.getEconomyProvider();
-		}
-		if (event.getCancelReason() != null) {
-			throw event.getCancelReason();
-		}
-		return null;
 	}
 
 	public Bunny sendGameStartEvent(World world) {
@@ -100,16 +94,17 @@ public class EventManager {
 		return !event.isCancelled();
 	}
 
-	public boolean sendPlayerBuyItemEvent(Player player, ItemStack itemStack) {
-		OstereierPlayerBuyItemEvent event = new OstereierPlayerBuyItemEvent(player, itemStack);
+	public EconomyProvider sendGetCustomEconomyProvider() throws OstereierException {
+		OstereierGetCustomEconomyProviderEvent event = new OstereierGetCustomEconomyProviderEvent(
+				configManager.getConfigEconomy());
 		plugin.getServer().getPluginManager().callEvent(event);
-		return !event.isCancelled();
-	}
-
-	public boolean sendPlayerSellItemEvent(Player player, ItemStack itemStack) {
-		OstereierPlayerSellItemEvent event = new OstereierPlayerSellItemEvent(player, itemStack);
-		plugin.getServer().getPluginManager().callEvent(event);
-		return !event.isCancelled();
+		if (!event.isCancelled()) {
+			return event.getEconomyProvider();
+		}
+		if (event.getCancelReason() != null) {
+			throw event.getCancelReason();
+		}
+		return null;
 	}
 
 	public Inventory sendPlayerOpenShopEvent(Player player, Inventory inventory) {
@@ -128,11 +123,33 @@ public class EventManager {
 		return event.getOffer();
 	}
 
-	public void sendStatisticEvent(boolean isAsync, LocalDateTime intervalStart, Collection<CollectDetailEntry> collectDetails,
-			Map<World, Integer> worldSegmentSizes, Collection<AggregatedEntry> aggregateds) {
-		OstereierStatisticEvent event = new OstereierStatisticEvent(isAsync, intervalStart, collectDetails, worldSegmentSizes,
-				aggregateds);
+	public boolean sendPlayerBuyItemEvent(Player player, ItemStack itemStack) {
+		OstereierPlayerBuyItemEvent event = new OstereierPlayerBuyItemEvent(player, itemStack);
 		plugin.getServer().getPluginManager().callEvent(event);
+		return !event.isCancelled();
+	}
+
+	public boolean sendPlayerSellItemEvent(Player player, ItemStack itemStack) {
+		OstereierPlayerSellItemEvent event = new OstereierPlayerSellItemEvent(player, itemStack);
+		plugin.getServer().getPluginManager().callEvent(event);
+		return !event.isCancelled();
+	}
+
+	public void sendStatisticEvent(boolean isAsync, LocalDateTime intervalStart,
+			Collection<CollectDetailEntry> collectDetails, Map<World, Integer> worldSegmentSizes,
+			Collection<AggregatedEntry> aggregateds) {
+		OstereierStatisticEvent event = new OstereierStatisticEvent(isAsync, intervalStart, collectDetails,
+				worldSegmentSizes, aggregateds);
+		plugin.getServer().getPluginManager().callEvent(event);
+	}
+
+	public ReloadDesignResult sendReloadDesignEvent() throws OstereierException {
+		OstereierReloadDesignEvent event = new OstereierReloadDesignEvent(plugin, configManager.getConfigEconomy());
+		plugin.getServer().getPluginManager().callEvent(event);
+		if (event.isCancelled() && (event.getCause() != null)) {
+			throw event.getCause();
+		}
+		return event.getResult();
 	}
 
 }

@@ -4,7 +4,8 @@ public enum ConfigEggMode {
 
 	ITEM,
 	BLOCK,
-	CUSTOM,
-	BALLOON;
+	ANIMAL,
+	BALLOON,
+	CUSTOM;
 
 }
